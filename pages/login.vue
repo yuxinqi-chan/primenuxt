@@ -8,7 +8,7 @@ definePageMeta({
 });
 
 const toast = useToast();
-const { login, init } = useAuth();
+const { login, initAdmin } = useAuth();
 const { data: isInitialized } = await useFetch("/api/auth/init", {
   method: "get",
   default: () => false,
@@ -17,11 +17,30 @@ const email = ref("");
 const password = ref("");
 const checked = ref(false);
 
-const {
-  status: initStatus,
-  data: initData,
-  execute: initExecute,
-} = await useAsyncData(init, { immediate: false });
+const { status: initStatus, execute: initExecute } = await useAsyncData(
+  async () => {
+    try {
+      await initAdmin();
+      toast.add({
+        severity: "success",
+        summary: "Admin initialized",
+        detail: "Admin has been initialized",
+        life: 3000,
+      });
+      navigateTo("/");
+    } catch (error) {
+      if (error instanceof FetchError) {
+        toast.add({
+          severity: "error",
+          summary: "Failed to initialize admin",
+          detail: error.statusMessage,
+          life: 3000,
+        });
+      }
+    }
+  },
+  { immediate: false },
+);
 const { status: loginStatus, execute: loginExecute } = await useAsyncData(
   async () => {
     try {
@@ -118,7 +137,7 @@ const { status: loginStatus, execute: loginExecute } = await useAsyncData(
               </span>
             </div>
             <Button
-              label="Initialize"
+              label="Initialize Admin"
               class="w-full"
               @click="initExecute()"
               :loading="initStatus === 'pending'"

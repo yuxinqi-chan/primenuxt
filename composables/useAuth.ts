@@ -15,6 +15,6 @@ export default function () {
         password: unref(password),
       },
     });
-  const init = () => $fetch("/api/auth/init", { method: "POST" });
-  return { user, logout, login, init };
+  const initAdmin = () => $fetch("/api/auth/init", { method: "POST" });
+  return { user, logout, login, initAdmin };
 }

@@ -10,7 +10,8 @@
     "postinstall": "nuxt prepare & prisma generate",
     "deploy": "npm run build && wrangler pages deploy",
     "cf-typegen": "wrangler types",
-    "migrate": "npx tsx prisma/migrate.ts create"
+    "migrate": "npx tsx prisma/migrate.ts create",
+    "apply": "npx tsx prisma/migrate.ts apply --remote"
   },
   "dependencies": {
     "@lucia-auth/adapter-prisma": "^4.0.1",
