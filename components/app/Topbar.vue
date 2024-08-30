@@ -3,11 +3,13 @@ import { NuxtLink } from "#components";
 import type { MenuMethods } from "primevue/menu";
 import type { MenuItem } from "primevue/menuitem";
 import type { PopoverMethods } from "primevue/popover";
+import { FetchError } from "ofetch";
 import Logo from "~/assets/icons/logo.svg?component";
 
 const props = defineProps<{
   class?: string;
 }>();
+const toast = useToast();
 const { user, logout } = useAuth();
 const { toggleDarkMode, isDarkTheme, sidebarDrawerVisible } = useLayout();
 const themeConfiguratorPopover = ref<PopoverMethods | null>(null);
@@ -27,8 +29,25 @@ const userMenuItems = ref<MenuItem[]>([
     label: "登出",
     icon: "pi pi-sign-out",
     command: async () => {
-      await logout();
-      navigateTo("/");
+      try {
+        await logout();
+        toast.add({
+          severity: "success",
+          summary: "登出成功",
+          detail: "欢迎下次光临",
+          life: 3000,
+        });
+        navigateTo("/");
+      } catch (error) {
+        if (error instanceof FetchError) {
+          toast.add({
+            severity: "error",
+            summary: "登出失败",
+            detail: error.statusMessage,
+            life: 3000,
+          });
+        }
+      }
     },
   },
 ]);
