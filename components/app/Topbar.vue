@@ -55,6 +55,9 @@ const mobileMenuItems = ref<MenuItem[]>([
   {
     label: "后台管理",
     icon: "pi pi-wrench",
+    command: () => {
+      navigateTo("/admin");
+    },
   },
   {
     separator: true,
