@@ -1,6 +1,12 @@
 import { z } from "zod";
 
 export default defineEventHandler(async (event) => {
+  if (!event.context.user) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+    });
+  }
   const body = await readValidatedBody(
     event,
     z.object({

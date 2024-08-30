@@ -1,10 +1,16 @@
 import { z } from "zod";
 export default defineEventHandler(async (event) => {
+  if (!event.context.user) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+    });
+  }
   const { id } = await getValidatedRouterParams(
     event,
     z.object({
       id: z.number({ coerce: true }),
-    }).parse
+    }).parse,
   );
   const prisma = usePrisma(event);
   await prisma.article.delete({

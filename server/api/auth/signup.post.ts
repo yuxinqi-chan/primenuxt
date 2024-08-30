@@ -3,6 +3,12 @@ import { z } from "zod";
 import { Prisma } from "@prisma/client";
 
 export default defineEventHandler(async (event) => {
+  if (!event.context.user) {
+    throw createError({
+      statusCode: 401,
+      statusMessage: "Unauthorized",
+    });
+  }
   const { username, password } = await readValidatedBody(
     event,
     z.object({
