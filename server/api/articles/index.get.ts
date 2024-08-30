@@ -1,16 +1,17 @@
 import { z } from "zod";
-
 export default defineEventHandler(async (event) => {
-  const { tag, orderBy, cursorId } = await getValidatedRouterParams(
+  const { tag, sort, cursorId, size, page } = await getValidatedQuery(
     event,
     z.object({
       tag: z.string().min(1).optional(),
-      orderBy: z.enum(["asc", "desc"]),
+      sort: z.enum(["asc", "desc"]).default("asc"),
       cursorId: z.number({ coerce: true }).int().positive().optional(),
+      page: z.number({ coerce: true }).int().positive().optional(),
+      size: z.number({ coerce: true }).int().positive().default(10),
     }).parse
   );
   const prisma = usePrisma(event);
-  const article = await prisma.article.findMany({
+  const articles = await prisma.article.findMany({
     include: {
       articleTags: {
         include: {
@@ -29,18 +30,18 @@ export default defineEventHandler(async (event) => {
           }
         : undefined,
     },
-    skip: cursorId ? 0 : 1,
-    take: 10,
-    cursor: { id: cursorId },
+    skip: cursorId ? 1 : page ? (page - 1) * size : 0,
+    take: size,
+    cursor: cursorId ? { id: cursorId } : undefined,
     orderBy: {
-      id: orderBy,
+      id: sort,
     },
   });
-  if (!article) {
+  if (!articles) {
     throw createError({
       statusCode: 404,
       statusMessage: "not found",
     });
   }
-  return article;
+  return articles;
 });

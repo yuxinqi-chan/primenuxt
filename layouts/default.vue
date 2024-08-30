@@ -1,34 +1,13 @@
+<script setup lang="ts"></script>
+
 <template>
-  <el-container>
-    <el-header class="flex justify-between">
-      <div class="m-5 cursor-pointer"></div>
-      <el-menu
-        :default-active="activeIndex"
-        class="el-menu-demo"
-        mode="horizontal"
-        :ellipsis="false"
-        @select="handleSelect">
-        <el-menu-item
-          v-for="item in menuItems"
-          :index="item.index"
-          :key="item.index">
-          {{ item.label }}
-        </el-menu-item>
-      </el-menu>
-      <div class="m-5 cursor-pointer"></div>
-    </el-header>
-    <el-main class="max-w-screen-xl mx-auto w-full">
+  <div class="flex min-h-screen flex-col">
+    <app-topbar class="sticky top-0"></app-topbar>
+    <main class="mx-auto w-full max-w-screen-xl py-8">
       <slot />
-    </el-main>
-  </el-container>
+    </main>
+    <app-footer class="mt-auto"></app-footer>
+  </div>
+  <Toast />
+  <ScrollTop />
 </template>
-
-<script lang="ts" setup>
-const menuItems = [{ index: "0", label: "主页" }];
-const activeIndex = ref("0");
-const handleSelect = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath);
-};
-</script>
-
-<style></style>

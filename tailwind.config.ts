@@ -1,5 +1,8 @@
-/** @type {import('tailwindcss').Config} */
+import type { Config } from "tailwindcss";
+// @ts-ignore
+import tailwindcssPrimeui from "tailwindcss-primeui";
 export default {
+  darkMode: ["selector", '[class*="app-dark"]'],
   content: [
     "./components/**/*.{js,vue,ts}",
     "./layouts/**/*.vue",
@@ -9,12 +12,13 @@ export default {
     "./error.vue",
   ],
   theme: {
-    extend: {
-      aspectRatio: {
-        "2/1": "2 / 1",
-        "3/2": "3 / 2",
-      },
+    screens: {
+      sm: "576px",
+      md: "768px",
+      lg: "992px",
+      xl: "1200px",
+      "2xl": "1920px",
     },
   },
-  plugins: [],
-};
+  plugins: [tailwindcssPrimeui],
+} satisfies Config;
