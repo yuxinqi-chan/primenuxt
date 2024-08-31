@@ -1,5 +1,9 @@
 import { z } from "zod";
 export default defineEventHandler(async (event) => {
+  const { id } = await getValidatedRouterParams(
+    event,
+    z.object({ id: z.number({ coerce: true }) }).parse,
+  );
   if (!event.context.user) {
     throw createError({
       statusCode: 401,
@@ -9,7 +13,6 @@ export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(
     event,
     z.object({
-      id: z.number({ coerce: true }),
       title: z.string().min(1).max(100),
       image: z.string().url().optional().nullable(),
       content: z.string().min(1).max(5000),
@@ -19,7 +22,7 @@ export default defineEventHandler(async (event) => {
   const prisma = usePrisma(event);
   const article = await prisma.article.update({
     where: {
-      id: body.id,
+      id: id,
     },
     data: body,
   });

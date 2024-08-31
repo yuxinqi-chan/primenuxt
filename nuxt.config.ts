@@ -32,6 +32,7 @@ export default defineNuxtConfig({
     "@primevue/nuxt-module",
     "@nuxt/eslint",
     "nuxt-svgo-loader",
+    "@vee-validate/nuxt",
   ],
   primevue: {
     options: {

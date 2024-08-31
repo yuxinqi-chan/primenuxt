@@ -20,6 +20,8 @@
     "@prisma/adapter-d1": "^5.18.0",
     "@prisma/client": "^5.18.0",
     "@tinymce/tinymce-vue": "^6.0.1",
+    "@vee-validate/nuxt": "^4.13.2",
+    "@vee-validate/yup": "^4.13.2",
     "lucia": "^3.2.0",
     "nuxt": "^3.13.0",
     "nuxt-svgo-loader": "^0.4.1",
@@ -29,7 +31,8 @@
     "sass": "^1.77.8",
     "tailwindcss-primeui": "^0.3.4",
     "vue": "^3.4.38",
-    "vue-router": "4.4.0"
+    "vue-router": "4.4.0",
+    "yup": "^1.4.0"
   },
   "devDependencies": {
     "@clack/prompts": "^0.7.0",

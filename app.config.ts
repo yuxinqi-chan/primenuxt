@@ -272,6 +272,11 @@ const menuItems: MenuItem[] = [
         icon: "pi pi-fw pi-pen-to-square",
         to: "/admin/articles",
       },
+      {
+        label: "账号",
+        icon: "pi pi-fw pi-user",
+        to: "/admin/account",
+      },
     ],
   },
 ];
