@@ -4,9 +4,15 @@ const { data: article } = await useFetch(`/api/articles/${id}`);
 </script>
 <template>
   <Card v-if="article">
-    <template #title>{{ article.title }}</template>
+    <template #title>
+      <h1 class="text-2xl font-bold">
+        {{ article.title }}
+      </h1>
+    </template>
     <template #content>
-      <div v-html="article.content"></div>
+      <div class="ql-snow">
+        <div class="ql-editor" v-html="article.content"></div>
+      </div>
     </template>
     <template #footer>
       <div class="flex flex-wrap gap-2">

@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
     z.object({
       title: z.string().min(1).max(100),
       image: z.string().url().optional().nullable(),
-      content: z.string().min(1).max(5000),
+      content: z.string().min(1),
       published: z.boolean().optional(),
     }).parse,
   );
