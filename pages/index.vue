@@ -15,6 +15,7 @@
 const { data: articles } = await useFetch("/api/articles", {
   query: {
     sort: "desc",
+    published: true,
   },
   default: () => [],
 });

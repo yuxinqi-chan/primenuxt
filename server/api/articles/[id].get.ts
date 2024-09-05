@@ -5,7 +5,7 @@ export default defineEventHandler(async (event) => {
   const { id } = await getYupRouterParams(
     event,
     yup.object({
-      id: yup.number().integer().positive(),
+      id: yup.number().integer().positive().required(),
     }),
   );
   const prisma = usePrisma(event);

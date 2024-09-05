@@ -15,6 +15,16 @@ body {
   background-color: var(--surface-ground);
 }
 
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  filter: blur(1rem);
+}
+
 @import "primeicons/primeicons.css";
 @import "quill/dist/quill.core.css";
 @import "quill/dist/quill.snow.css";

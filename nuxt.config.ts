@@ -13,7 +13,10 @@ export default defineNuxtConfig({
         },
       ],
     },
-    pageTransition: {},
+    pageTransition: {
+      name: "page",
+      mode: "out-in",
+    },
   },
   css: ["~/assets/styles.scss", "~/assets/tailwind.css"],
   postcss: {

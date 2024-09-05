@@ -24,7 +24,6 @@ const deleteArticlesDialog = ref(false);
 const filters = ref({
   global: { value: null, matchMode: FilterMatchMode.CONTAINS },
 });
-const submitted = ref(false);
 
 async function deleteArticle() {
   if (deletingArticle.value) {
@@ -55,13 +54,18 @@ function deleteSelectedArticles() {
     life: 3000,
   });
 }
-
-function getPublicshedValue(published: boolean) {
-  return published ? "Published" : "Unpublished";
+function updatePubliched(id: number, published: boolean) {
+  return $fetch(`/api/articles/${id}`, {
+    method: "PUT",
+    body: {
+      published: published,
+    },
+  });
 }
-function getPublicshedLabel(published: boolean) {
-  return published ? "success" : "danger";
-}
+const publishedMutation = useMutation({
+  mutationFn: (article: ArticleGet) =>
+    updatePubliched(article.id, article.published),
+});
 </script>
 
 <template>
@@ -126,14 +130,14 @@ function getPublicshedLabel(published: boolean) {
           </template>
         </Column>
         <Column
-          field="inventoryStatus"
-          header="Status"
+          field="published"
+          header="Published"
           sortable
           style="min-width: 12rem">
           <template #body="{ data }: { data: ArticleGet }">
-            <Tag
-              :value="getPublicshedValue(data.published)"
-              :severity="getPublicshedLabel(data.published)" />
+            <ToggleSwitch
+              v-model="data.published"
+              @change="publishedMutation.mutate(data)" />
           </template>
         </Column>
         <Column :exportable="false" style="min-width: 12rem">
@@ -152,51 +156,50 @@ function getPublicshedLabel(published: boolean) {
           </template>
         </Column>
       </DataTable>
+      <Dialog
+        v-model:visible="deletingDialog"
+        :style="{ width: '450px' }"
+        header="Confirm"
+        :modal="true">
+        <div class="flex items-center gap-4">
+          <i class="pi pi-exclamation-triangle !text-3xl" />
+          <span v-if="deletingArticle">
+            Are you sure you want to delete
+            <b>{{ deletingArticle.title }}</b>
+            ?
+          </span>
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            text
+            @click="deletingArticle = undefined" />
+          <Button label="Yes" icon="pi pi-check" @click="deleteArticle" />
+        </template>
+      </Dialog>
+      <Dialog
+        v-model:visible="deleteArticlesDialog"
+        :style="{ width: '450px' }"
+        header="Confirm"
+        :modal="true">
+        <div class="flex items-center gap-4">
+          <i class="pi pi-exclamation-triangle !text-3xl" />
+          <span>Are you sure you want to delete the selected articles?</span>
+        </div>
+        <template #footer>
+          <Button
+            label="No"
+            icon="pi pi-times"
+            text
+            @click="deleteArticlesDialog = false" />
+          <Button
+            label="Yes"
+            icon="pi pi-check"
+            text
+            @click="deleteSelectedArticles" />
+        </template>
+      </Dialog>
     </template>
   </Card>
-  <Dialog
-    v-model:visible="deletingDialog"
-    :style="{ width: '450px' }"
-    header="Confirm"
-    :modal="true">
-    <div class="flex items-center gap-4">
-      <i class="pi pi-exclamation-triangle !text-3xl" />
-      <span v-if="deletingArticle">
-        Are you sure you want to delete
-        <b>{{ deletingArticle.title }}</b>
-        ?
-      </span>
-    </div>
-    <template #footer>
-      <Button
-        label="No"
-        icon="pi pi-times"
-        text
-        @click="deletingArticle = undefined" />
-      <Button label="Yes" icon="pi pi-check" @click="deleteArticle" />
-    </template>
-  </Dialog>
-
-  <Dialog
-    v-model:visible="deleteArticlesDialog"
-    :style="{ width: '450px' }"
-    header="Confirm"
-    :modal="true">
-    <div class="flex items-center gap-4">
-      <i class="pi pi-exclamation-triangle !text-3xl" />
-      <span>Are you sure you want to delete the selected articles?</span>
-    </div>
-    <template #footer>
-      <Button
-        label="No"
-        icon="pi pi-times"
-        text
-        @click="deleteArticlesDialog = false" />
-      <Button
-        label="Yes"
-        icon="pi pi-check"
-        text
-        @click="deleteSelectedArticles" />
-    </template>
-  </Dialog>
 </template>

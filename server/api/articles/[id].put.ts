@@ -3,7 +3,7 @@ import * as yup from "yup";
 export default defineEventHandler(async (event) => {
   const { id } = await getYupRouterParams(
     event,
-    yup.object({ id: yup.number().integer().positive() }),
+    yup.object({ id: yup.number().integer().positive().required() }),
   );
   if (!event.context.user) {
     throw createError({
@@ -15,9 +15,9 @@ export default defineEventHandler(async (event) => {
     event,
     yup.object({
       title: yup.string().min(1).max(100),
-      image: yup.string().url().optional(),
+      image: yup.string().url(),
       content: yup.string().min(1),
-      published: yup.boolean().optional(),
+      published: yup.boolean(),
     }),
   );
   const prisma = usePrisma(event);

@@ -10,7 +10,6 @@ const {
   setSurface,
   setPreset,
   isDarkTheme,
-  setMenuMode,
 } = useLayout();
 
 const preset = ref(layoutConfig.preset);
@@ -285,10 +284,6 @@ function onPresetChange() {
     .surfacePalette(surfacePalette)
     .use({ useDefaultOptions: true });
 }
-
-function onMenuModeChange() {
-  setMenuMode(menuMode.value);
-}
 </script>
 
 <template>
@@ -344,16 +339,6 @@ function onMenuModeChange() {
         @change="onPresetChange"
         :options="presetOptions"
         :allowEmpty="false" />
-    </div>
-    <div class="flex flex-col gap-2">
-      <span class="text-sm font-semibold text-muted-color">Menu Mode</span>
-      <SelectButton
-        v-model="menuMode"
-        @change="onMenuModeChange"
-        :options="menuModeOptions"
-        :allowEmpty="false"
-        optionLabel="label"
-        optionValue="value" />
     </div>
   </div>
 </template>

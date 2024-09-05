@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
       cursorId: yup.number().integer().positive().optional(),
       page: yup.number().integer().positive().optional(),
       size: yup.number().integer().positive().default(10),
-      published: yup.boolean().default(true),
+      published: yup.boolean().optional(),
     }),
   );
   const prisma = usePrisma(event);
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
       },
     },
     where: {
-      published: user ? published : false,
+      published: user ? published : true,
       articleTags: tag
         ? {
             some: {

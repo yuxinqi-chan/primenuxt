@@ -3,7 +3,6 @@ import type { MenuItem } from "~/types/layout";
 
 const route = useRoute();
 
-const { layoutState, setActiveMenuItem, onMenuToggle } = useLayout();
 export interface Props {
   item: MenuItem;
   index?: number;
@@ -11,7 +10,7 @@ export interface Props {
   parentItemKey?: string | null;
 }
 
-const props = withDefaults(defineProps<Props>(), {
+withDefaults(defineProps<Props>(), {
   index: 0,
   root: true,
   parentItemKey: null,
@@ -19,54 +18,6 @@ const props = withDefaults(defineProps<Props>(), {
 
 const isActiveMenu = ref(false);
 const itemKey = ref<string | null>(null);
-
-onBeforeMount(() => {
-  itemKey.value = props.parentItemKey
-    ? props.parentItemKey + "-" + props.index
-    : String(props.index);
-
-  const activeItem = layoutState.activeMenuItem;
-
-  isActiveMenu.value =
-    activeItem === itemKey.value || activeItem
-      ? activeItem.startsWith(itemKey.value + "-")
-      : false;
-});
-
-watch(
-  () => layoutState.activeMenuItem,
-  (newVal) => {
-    isActiveMenu.value =
-      newVal === itemKey.value ||
-      (!!newVal && newVal.startsWith(itemKey.value + "-"));
-  },
-);
-
-function itemClick(event: Event, item: MenuItem) {
-  if (item.disabled) {
-    event.preventDefault();
-    return;
-  }
-
-  if (
-    (item.to || item.url) &&
-    (layoutState.staticMenuMobileActive || layoutState.overlayMenuActive)
-  ) {
-    onMenuToggle();
-  }
-
-  if (item.command) {
-    item.command({ originalEvent: event, item: item });
-  }
-
-  const foundItemKey = item.items
-    ? isActiveMenu.value
-      ? props.parentItemKey
-      : itemKey.value
-    : itemKey.value;
-
-  setActiveMenuItem(foundItemKey);
-}
 
 function checkActiveRoute(item: MenuItem) {
   return route.path === item.to;
@@ -82,8 +33,7 @@ function checkActiveRoute(item: MenuItem) {
     </div>
     <NuxtLink
       v-if="item.to && !item.items && item.visible !== false"
-      @click="itemClick($event, item)"
-      class="ml-4 flex items-center overflow-hidden rounded-[var(--p-content-border-radius)] px-4 py-3 hover:bg-[var(--p-content-hover-background)]"
+      class="ml-2 flex items-center overflow-hidden rounded-[var(--p-content-border-radius)] px-4 py-3 hover:bg-[var(--p-content-hover-background)]"
       :class="[
         item.class,
         { 'font-bold text-primary': checkActiveRoute(item) },

@@ -14,16 +14,6 @@ const layoutConfig = reactive({
   menuMode: "static",
 });
 
-const layoutState = reactive({
-  staticMenuDesktopInactive: false,
-  overlayMenuActive: false,
-  profileSidebarVisible: false,
-  configSidebarVisible: false,
-  staticMenuMobileActive: false,
-  menuHoverActive: false,
-  activeMenuItem: null as string | null,
-});
-
 export function useLayout() {
   const sidebarDrawerVisible = useState("sidebarDrawerVisible", () => false);
   const setPrimary = (value: string) => {
@@ -36,14 +26,6 @@ export function useLayout() {
 
   const setPreset = (value: keyof typeof presets) => {
     layoutConfig.preset = value;
-  };
-
-  const setActiveMenuItem = (item: string | null) => {
-    layoutState.activeMenuItem = item;
-  };
-
-  const setMenuMode = (mode: string) => {
-    layoutConfig.menuMode = mode;
   };
 
   const toggleDarkMode = () => {
@@ -61,29 +43,6 @@ export function useLayout() {
     document.documentElement.classList.toggle("app-dark");
   };
 
-  const onMenuToggle = () => {
-    if (layoutConfig.menuMode === "overlay") {
-      layoutState.overlayMenuActive = !layoutState.overlayMenuActive;
-    }
-
-    if (window.innerWidth > 991) {
-      layoutState.staticMenuDesktopInactive =
-        !layoutState.staticMenuDesktopInactive;
-    } else {
-      layoutState.staticMenuMobileActive = !layoutState.staticMenuMobileActive;
-    }
-  };
-
-  const resetMenu = () => {
-    layoutState.overlayMenuActive = false;
-    layoutState.staticMenuMobileActive = false;
-    layoutState.menuHoverActive = false;
-  };
-
-  const isSidebarActive = computed(
-    () => layoutState.overlayMenuActive || layoutState.staticMenuMobileActive,
-  );
-
   const isDarkTheme = computed(() => layoutConfig.darkTheme);
 
   const getPrimary = computed(() => layoutConfig.primary);
@@ -92,19 +51,13 @@ export function useLayout() {
 
   return {
     layoutConfig: readonly(layoutConfig),
-    layoutState: readonly(layoutState),
-    onMenuToggle,
-    isSidebarActive,
     isDarkTheme,
     getPrimary,
     getSurface,
-    setActiveMenuItem,
     toggleDarkMode,
     setPrimary,
     setSurface,
     setPreset,
-    resetMenu,
-    setMenuMode,
     presets,
     sidebarDrawerVisible,
   };
