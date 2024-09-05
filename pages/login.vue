@@ -77,7 +77,7 @@ const { status: loginStatus, execute: loginExecute } = await useAsyncData(
           padding: 0.3rem;
           background: linear-gradient(
             180deg,
-            var(--primary-color) 10%,
+            var(--p-primary-color) 10%,
             rgba(33, 150, 243, 0) 30%
           );
         ">

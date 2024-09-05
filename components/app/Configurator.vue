@@ -309,7 +309,7 @@ function onMenuModeChange() {
           :style="{
             backgroundColor: `${
               primaryColor.name === 'noir'
-                ? 'var(--text-color)'
+                ? 'var(--p-text-color)'
                 : primaryColor.palette['500']
             }`,
           }"></button>

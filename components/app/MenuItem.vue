@@ -39,7 +39,7 @@ watch(
     isActiveMenu.value =
       newVal === itemKey.value ||
       (!!newVal && newVal.startsWith(itemKey.value + "-"));
-  }
+  },
 );
 
 function itemClick(event: Event, item: MenuItem) {
@@ -74,42 +74,28 @@ function checkActiveRoute(item: MenuItem) {
 </script>
 
 <template>
-  <li
-    :class="{ 'layout-root-menuitem': root, 'active-menuitem': isActiveMenu }">
+  <li>
     <div
       v-if="root && item.visible !== false"
-      class="layout-menuitem-root-text">
+      class="my-3 text-sm font-bold uppercase">
       {{ item.label }}
     </div>
-    <a
-      v-if="(!item.to || item.items) && item.visible !== false"
-      :href="item.url"
-      @click="itemClick($event, item)"
-      :class="item.class"
-      :target="item.target"
-      tabindex="0">
-      <i :class="item.icon" class="layout-menuitem-icon"></i>
-      <span class="layout-menuitem-text">{{ item.label }}</span>
-      <i
-        class="pi pi-fw pi-angle-down layout-submenu-toggler"
-        v-if="item.items"></i>
-    </a>
     <NuxtLink
       v-if="item.to && !item.items && item.visible !== false"
       @click="itemClick($event, item)"
-      :class="[item.class, { 'active-route': checkActiveRoute(item) }]"
+      class="ml-4 flex items-center overflow-hidden rounded-[var(--p-content-border-radius)] px-4 py-3 hover:bg-[var(--p-content-hover-background)]"
+      :class="[
+        item.class,
+        { 'font-bold text-primary': checkActiveRoute(item) },
+      ]"
       tabindex="0"
       :to="item.to">
-      <i :class="item.icon" class="layout-menuitem-icon"></i>
-      <span class="layout-menuitem-text">{{ item.label }}</span>
-      <i
-        class="pi pi-fw pi-angle-down layout-submenu-toggler"
-        v-if="item.items"></i>
+      <i :class="item.icon" class="mr-2"></i>
+      <span>{{ item.label }}</span>
+      <i class="pi pi-fw pi-angle-down" v-if="item.items"></i>
     </NuxtLink>
-    <Transition
-      v-if="item.items && item.visible !== false"
-      name="layout-submenu">
-      <ul v-show="root ? true : isActiveMenu" class="layout-submenu">
+    <Transition v-if="item.items && item.visible !== false">
+      <ul v-show="root ? true : isActiveMenu">
         <app-menu-item
           v-for="(child, i) in item.items"
           :key="child.label"

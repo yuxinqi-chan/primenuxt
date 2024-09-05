@@ -83,7 +83,7 @@ const mobileMenuItems = ref<MenuItem[]>([
       <NuxtLink
         to="/"
         class="inline-flex items-center gap-2 text-2xl font-medium">
-        <Logo class="w-12" />
+        <Logo class="w-12 text-[var(--p-primary-color)]" />
         <span>SAKAI</span>
       </NuxtLink>
     </div>

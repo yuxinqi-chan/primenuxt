@@ -7,13 +7,12 @@ const model = appConfig.menuItems;
 </script>
 
 <template>
-  <ul class="layout-menu">
+  <ul>
     <template v-for="(item, i) in model" :key="item.label">
       <app-menu-item
         v-if="!item.separator"
         :item="item"
         :index="i"></app-menu-item>
-      <li v-if="item.separator" class="menu-separator"></li>
     </template>
   </ul>
 </template>

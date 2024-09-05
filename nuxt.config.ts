@@ -13,6 +13,7 @@ export default defineNuxtConfig({
         },
       ],
     },
+    pageTransition: {},
   },
   css: ["~/assets/styles.scss", "~/assets/tailwind.css"],
   postcss: {
@@ -33,6 +34,7 @@ export default defineNuxtConfig({
     "@nuxt/eslint",
     "nuxt-svgo-loader",
     "@vee-validate/nuxt",
+    "@formkit/auto-animate/nuxt",
   ],
   primevue: {
     options: {
