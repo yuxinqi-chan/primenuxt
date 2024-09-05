@@ -1,4 +1,4 @@
-import { z } from "zod";
+import * as yup from "yup";
 
 export default defineEventHandler(async (event) => {
   if (!event.context.user) {
@@ -7,22 +7,18 @@ export default defineEventHandler(async (event) => {
       statusMessage: "Unauthorized",
     });
   }
-  const body = await readValidatedBody(
+  const body = await readYupBody(
     event,
-    z.object({
-      title: z.string().min(1).max(100),
-      image: z.string().url().optional().nullable(),
-      content: z.string().min(1),
-      published: z.boolean().optional(),
-    }).parse,
+    yup.object({
+      title: yup.string().min(1).max(100).required(),
+      image: yup.string().url().optional(),
+      content: yup.string().min(1).required(),
+      published: yup.boolean().optional(),
+    }),
   );
   const prisma = usePrisma(event);
   const article = await prisma.article.create({
-    data: {
-      title: body.title,
-      image: body.image,
-      content: body.content,
-    },
+    data: body,
   });
   return article;
 });

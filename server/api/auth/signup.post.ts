@@ -1,5 +1,5 @@
 import { generateId } from "lucia";
-import { z } from "zod";
+import * as yup from "yup";
 import { Prisma } from "@prisma/client";
 
 export default defineEventHandler(async (event) => {
@@ -9,12 +9,12 @@ export default defineEventHandler(async (event) => {
       statusMessage: "Unauthorized",
     });
   }
-  const { username, password } = await readValidatedBody(
+  const { username, password } = await readYupBody(
     event,
-    z.object({
-      username: z.string().min(3).max(31),
-      password: z.string().min(6).max(255),
-    }).parse,
+    yup.object({
+      username: yup.string().min(3).max(31).required(),
+      password: yup.string().min(6).max(255).required(),
+    }),
   );
   const lucia = event.context.lucia;
   const prisma = event.context.prisma;

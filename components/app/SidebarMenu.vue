@@ -7,7 +7,7 @@ const model = appConfig.menuItems;
 </script>
 
 <template>
-  <ul>
+  <ul v-auto-animate>
     <template v-for="(item, i) in model" :key="item.label">
       <app-menu-item
         v-if="!item.separator"

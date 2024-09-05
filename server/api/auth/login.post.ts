@@ -1,12 +1,12 @@
-import { z } from "zod";
+import * as yup from "yup";
 
 export default defineEventHandler(async (event) => {
-  const { username, password } = await readValidatedBody(
+  const { username, password } = await readYupBody(
     event,
-    z.object({
-      username: z.string().min(3).max(31),
-      password: z.string().min(6).max(255),
-    }).parse,
+    yup.object({
+      username: yup.string().min(3).max(31).required(),
+      password: yup.string().min(6).max(255).required(),
+    }),
   );
   const lucia = event.context.lucia;
   const prisma = event.context.prisma;
@@ -15,16 +15,6 @@ export default defineEventHandler(async (event) => {
   });
 
   if (!existingUser || !existingUser.hashedPassword) {
-    // NOTE:
-    // Returning immediately allows malicious actors to figure out valid emails/username from response times,
-    // allowing them to only focus on guessing passwords in brute-force attacks.
-    // As a preventive measure, you may want to hash passwords even for invalid emails.
-    // However, valid emails can be already be revealed with the signup page
-    // and a similar timing issue can likely be found in password reset implementation.
-    // It will also be much more resource intensive.
-    // Since protecting against this is none-trivial,
-    // it is crucial your implementation is protected against brute-force attacks with login throttling etc.
-    // If emails/usernames are public, you may outright tell the user that the username is invalid.
     throw createError({
       status: 400,
       statusMessage: "Invalid username or password",

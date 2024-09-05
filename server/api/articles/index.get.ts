@@ -1,14 +1,17 @@
-import { z } from "zod";
+import * as yup from "yup";
+
 export default defineEventHandler(async (event) => {
-  const { tag, sort, cursorId, size, page } = await getValidatedQuery(
+  const user = event.context.user;
+  const { tag, sort, cursorId, size, page, published } = await getYupQuery(
     event,
-    z.object({
-      tag: z.string().min(1).optional(),
-      sort: z.enum(["asc", "desc"]).default("asc"),
-      cursorId: z.number({ coerce: true }).int().positive().optional(),
-      page: z.number({ coerce: true }).int().positive().optional(),
-      size: z.number({ coerce: true }).int().positive().default(10),
-    }).parse
+    yup.object({
+      tag: yup.string().min(1).optional(),
+      sort: yup.string().oneOf(["asc", "desc"]).default("asc"),
+      cursorId: yup.number().integer().positive().optional(),
+      page: yup.number().integer().positive().optional(),
+      size: yup.number().integer().positive().default(10),
+      published: yup.boolean().default(true),
+    }),
   );
   const prisma = usePrisma(event);
   const articles = await prisma.article.findMany({
@@ -20,6 +23,7 @@ export default defineEventHandler(async (event) => {
       },
     },
     where: {
+      published: user ? published : false,
       articleTags: tag
         ? {
             some: {

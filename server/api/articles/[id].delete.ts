@@ -1,4 +1,5 @@
-import { z } from "zod";
+import * as yup from "yup";
+
 export default defineEventHandler(async (event) => {
   if (!event.context.user) {
     throw createError({
@@ -6,11 +7,11 @@ export default defineEventHandler(async (event) => {
       statusMessage: "Unauthorized",
     });
   }
-  const { id } = await getValidatedRouterParams(
+  const { id } = await getYupRouterParams(
     event,
-    z.object({
-      id: z.number({ coerce: true }),
-    }).parse,
+    yup.object({
+      id: yup.number().integer().positive(),
+    }),
   );
   const prisma = usePrisma(event);
   await prisma.article.delete({

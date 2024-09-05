@@ -1,10 +1,12 @@
-import { z } from "zod";
+import * as yup from "yup";
+
 export default defineEventHandler(async (event) => {
-  const { id } = await getValidatedRouterParams(
+  const user = event.context.user;
+  const { id } = await getYupRouterParams(
     event,
-    z.object({
-      id: z.number({ coerce: true }),
-    }).parse
+    yup.object({
+      id: yup.number().integer().positive(),
+    }),
   );
   const prisma = usePrisma(event);
   const article = await prisma.article.findUnique({
@@ -19,7 +21,7 @@ export default defineEventHandler(async (event) => {
       id,
     },
   });
-  if (!article) {
+  if (!article || (!user && !article.published)) {
     throw createError({
       statusCode: 404,
       statusMessage: "not found",

@@ -63,9 +63,7 @@ async function editArticle() {
         Name is required.
       </small>
     </div>
-    <ClientOnly>
-      <Editor v-model="article.content" editorStyle="height: 320px" />
-    </ClientOnly>
+    <Editor v-model="article.content" editorStyle="height: 320px" />
     <div class="flex items-center justify-end gap-4">
       <label for="published" class="block font-bold">Published</label>
       <ToggleSwitch v-model="article.published" />
