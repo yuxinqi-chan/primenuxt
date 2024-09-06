@@ -11,21 +11,34 @@ export default defineEventHandler(async (event) => {
       statusMessage: "Unauthorized",
     });
   }
-  const body = await readYupBody(
+  const { tags, ...articleFields } = await readYupBody(
     event,
     yup.object({
-      title: yup.string().min(1).max(100),
-      image: yup.string().url(),
-      content: yup.string().min(1),
-      published: yup.boolean(),
+      title: yup.string().min(1).max(100).required(),
+      image: yup.string().url().optional(),
+      content: yup.string().min(1).required(),
+      published: yup.boolean().required(),
+      tags: yup.array(
+        yup.object({
+          id: yup.number().integer().positive().required(),
+          name: yup.string().min(1).max(100).required(),
+        }),
+      ),
     }),
   );
   const prisma = usePrisma(event);
-  const article = await prisma.article.update({
+  const article = await prisma.article.upsert({
     where: {
-      id: id,
+      id,
     },
-    data: body,
+    create: articleFields,
+    update: {
+      ...articleFields,
+      tags: {
+        set: [],
+        connect: tags,
+      },
+    },
   });
   if (!article) {
     throw createError({

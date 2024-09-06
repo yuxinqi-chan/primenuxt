@@ -11,11 +11,7 @@ export default defineEventHandler(async (event) => {
   const prisma = usePrisma(event);
   const article = await prisma.article.findUnique({
     include: {
-      articleTags: {
-        include: {
-          tag: true,
-        },
-      },
+      tags: true,
     },
     where: {
       id,

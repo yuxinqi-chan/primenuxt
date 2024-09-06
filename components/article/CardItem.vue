@@ -4,10 +4,8 @@ const { article } = defineProps<{
     id: number;
     title: string;
     content: string;
-    articleTags: {
-      tag: {
-        name: string;
-      };
+    tags: {
+      name: string;
     }[];
   };
 }>();
@@ -25,9 +23,9 @@ const summary = computed(() => {
       <template #footer>
         <div class="flex flex-wrap gap-2">
           <Tag
-            v-for="tag in article.articleTags"
-            :key="tag.tag.name"
-            :value="tag.tag.name"
+            v-for="tag in article.tags"
+            :key="tag.name"
+            :value="tag.name"
             severity="info"
             rounded />
         </div>

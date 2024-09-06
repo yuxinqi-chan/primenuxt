@@ -6,7 +6,6 @@ import type { SerializeObject } from "nitropack";
 import type { Prisma } from "@prisma/client";
 
 type ArticleGet = SerializeObject<Prisma.ArticleGetPayload<{}>>;
-type ArticleCreate = Prisma.ArticleCreateInput;
 
 definePageMeta({
   layout: "admin",
@@ -56,7 +55,7 @@ function deleteSelectedArticles() {
 }
 function updatePubliched(id: number, published: boolean) {
   return $fetch(`/api/articles/${id}`, {
-    method: "PUT",
+    method: "PATCH",
     body: {
       published: published,
     },

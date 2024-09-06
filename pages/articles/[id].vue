@@ -9,19 +9,19 @@ const { data: article } = await useFetch(`/api/articles/${id}`);
         {{ article.title }}
       </h1>
     </template>
+    <template #subtitle>
+      <div class="flex flex-wrap gap-2">
+        <Tag
+          v-for="tag in article.tags"
+          :key="tag.name"
+          :value="tag.name"
+          severity="info"
+          rounded />
+      </div>
+    </template>
     <template #content>
       <div class="ql-snow">
         <div class="ql-editor" v-html="article.content"></div>
-      </div>
-    </template>
-    <template #footer>
-      <div class="flex flex-wrap gap-2">
-        <Tag
-          v-for="tag in article.articleTags"
-          :key="tag.tag.name"
-          :value="tag.tag.name"
-          severity="info"
-          rounded />
       </div>
     </template>
   </Card>

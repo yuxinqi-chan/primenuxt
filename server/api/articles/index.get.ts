@@ -16,20 +16,14 @@ export default defineEventHandler(async (event) => {
   const prisma = usePrisma(event);
   const articles = await prisma.article.findMany({
     include: {
-      articleTags: {
-        include: {
-          tag: true,
-        },
-      },
+      tags: true,
     },
     where: {
       published: user ? published : true,
-      articleTags: tag
+      tags: tag
         ? {
             some: {
-              tag: {
-                name: tag,
-              },
+              name: tag,
             },
           }
         : undefined,

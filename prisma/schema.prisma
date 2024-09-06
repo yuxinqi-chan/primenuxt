@@ -30,27 +30,18 @@ model Session {
 }
 
 model Article {
-  id          Int          @id @default(autoincrement())
-  title       String
-  image       String?
-  content     String
-  published   Boolean      @default(false)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  articleTags ArticleTag[]
+  id        Int      @id @default(autoincrement())
+  title     String
+  image     String?
+  content   String
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  tags      Tag[]
 }
 
 model Tag {
-  id          Int          @id @default(autoincrement())
-  name        String       @unique
-  articleTags ArticleTag[]
-}
-
-model ArticleTag {
-  articleId Int
-  tagId     Int
-  article   Article @relation(fields: [articleId], references: [id])
-  tag       Tag     @relation(fields: [tagId], references: [id])
-
-  @@id([articleId, tagId])
+  id       Int       @id @default(autoincrement())
+  name     String    @unique
+  articles Article[]
 }
