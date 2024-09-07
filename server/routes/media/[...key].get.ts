@@ -9,7 +9,6 @@ export default defineEventHandler(async (event) => {
   const media = useStorage<R2ObjectBody>("media");
   const ifNoneMatch = getRequestHeader(event, "If-None-Match");
   const head = await media.getMeta(key);
-  console.log(head);
   if (!head) {
     setResponseStatus(event, 404);
     return;

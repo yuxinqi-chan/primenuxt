@@ -54,15 +54,6 @@ export default defineEventHandler(async (event) => {
           },
         },
       );
-      // await event.context.cloudflare.env.MEDIA_BUCKET.put(
-      //   `${id}/${part.filename}`,
-      //   new File([part.data], part.filename, { type: part.type }),
-      //   {
-      //     httpMetadata: {
-      //       contentType: part.type,
-      //     },
-      //   },
-      // );
       articleFields.content = articleFields.content.replace(
         part.name,
         `/media/${id}/${part.filename}`,
