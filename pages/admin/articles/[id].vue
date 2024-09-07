@@ -4,6 +4,14 @@ import type { SerializeObject } from "nitropack";
 import type { Prisma } from "@prisma/client";
 import type { AutoCompleteCompleteEvent } from "primevue/autocomplete";
 
+function sanitize(url: string, protocols: string[]) {
+  var anchor = document.createElement("a");
+  anchor.href = url;
+
+  var protocol = anchor.href.slice(0, anchor.href.indexOf(":"));
+  return protocols.indexOf(protocol) > -1;
+}
+
 type TagGet = SerializeObject<Prisma.TagGetPayload<{}>>;
 
 definePageMeta({
@@ -28,6 +36,7 @@ const { data: tags } = await useFetch<TagGet[]>(`/api/tags`, {
 });
 const enteredTag = ref<TagGet | string>();
 const filteredTags = ref<TagGet[]>([]);
+const uploadFiles = reactive<Record<string, File>>({});
 
 function search(event: AutoCompleteCompleteEvent) {
   filteredTags.value = tags.value.filter((tag) =>
@@ -66,14 +75,17 @@ async function removeTag(tag: TagGet) {
 async function editArticle() {
   if (article.value) {
     try {
+      const formData = new FormData();
+      formData.append("title", article.value.title);
+      formData.append("content", article.value.content);
+      formData.append("published", String(article.value.published));
+      formData.append("tags", JSON.stringify(article.value.tags));
+      for (const [key, file] of Object.entries(uploadFiles)) {
+        formData.append(key, file, file.name);
+      }
       await $fetch(`/api/articles/${article.value.id}`, {
         method: "PUT",
-        body: {
-          title: article.value.title,
-          content: article.value.content,
-          published: article.value.published,
-          tags: article.value.tags,
-        },
+        body: formData,
       });
       toast.add({
         severity: "success",
@@ -93,6 +105,45 @@ async function editArticle() {
       }
     }
   }
+}
+
+async function editorLoad(editor: any) {
+  console.log(editor);
+  const Quill = (await import("quill")).default;
+  // @ts-ignore
+  const Delta = Quill.import("delta");
+  Quill.import("formats/image").sanitize = (url: string) => {
+    return sanitize(url, ["http", "https", "data", "blob"]) ? url : "//:0";
+  };
+  editor.getModule("toolbar").addHandler("image", () => {
+    const input = document.createElement("input");
+    input.setAttribute("type", "file");
+    input.setAttribute("accept", "image/*");
+    input.click();
+    input.onchange = () => {
+      if (!input.files) {
+        return;
+      }
+      const images = Array.from(input.files).map((file) => {
+        return {
+          url: URL.createObjectURL(file),
+          file,
+        };
+      });
+      const range = editor.getSelection();
+      // images.forEach((image) =>
+      //   editor.insertEmbed(range.index, "image", image.url),
+      // );
+      const update = images.reduce((delta, image) => {
+        return delta.insert({ image: image.url });
+      }, new Delta().retain(range.index).delete(range.length));
+      editor.updateContents(update, "user");
+      editor.setSelection(range.index + images.length, "silent");
+      images.forEach((image) => {
+        Object.assign(uploadFiles, { [image.url]: image.file });
+      });
+    };
+  });
 }
 </script>
 
@@ -138,7 +189,12 @@ async function editArticle() {
         </InputGroup>
       </div>
     </div>
-    <Editor v-model="article.content" class="flex flex-col" />
+    <Editor
+      ref="editor"
+      v-model="article.content"
+      class="flex flex-col"
+      @text-change="(e) => console.log(e)"
+      @load="(e) => editorLoad(e.instance)" />
     <div class="flex items-center justify-end gap-4">
       <label for="published" class="block font-bold">Published</label>
       <ToggleSwitch v-model="article.published" />

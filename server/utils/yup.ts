@@ -4,8 +4,11 @@ import * as yup from "yup";
 export const getYupRouterParams = <T extends yup.AnySchema>(
   event: H3Event,
   schema: T,
+  opts?: {
+    decode?: boolean;
+  },
 ) => {
-  return getValidatedRouterParams(event, (data) => schema.validate(data));
+  return getValidatedRouterParams(event, (data) => schema.validate(data), opts);
 };
 
 export const readYupBody = <T extends yup.AnySchema>(
