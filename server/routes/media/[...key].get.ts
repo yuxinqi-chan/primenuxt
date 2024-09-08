@@ -1,14 +1,14 @@
 import * as yup from "yup";
 
 export default defineEventHandler(async (event) => {
+  console.log(import.meta.dev);
   const { key } = await getYupRouterParams(
     event,
     yup.object({ key: yup.string().required() }),
     { decode: true },
   );
-  const media = useStorage<R2ObjectBody>("media");
   const ifNoneMatch = getRequestHeader(event, "If-None-Match");
-  const head = await media.getMeta(key);
+  const head = await event.context.mediaBucket.head(key);
   if (!head) {
     setResponseStatus(event, 404);
     return;
@@ -18,19 +18,11 @@ export default defineEventHandler(async (event) => {
     setResponseStatus(event, 304);
     return;
   }
-  const item = await media.getItemRaw<ArrayBuffer>(key);
-  if (!item) {
+  const obj = await event.context.mediaBucket.get(key);
+  if (!obj) {
     setResponseStatus(event, 404);
     return;
   }
   setHeader(event, "ETag", etag);
-  if (
-    head.httpMetadata &&
-    typeof head.httpMetadata === "object" &&
-    "contentType" in head.httpMetadata &&
-    typeof head.httpMetadata.contentType === "string"
-  ) {
-    return new Blob([item], { type: head.httpMetadata.contentType });
-  }
-  return new Blob([item]);
+  return obj.blob();
 });

@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import mime from "mime";
 
 export default defineEventHandler(async (event) => {
   const { id } = await getYupRouterParams(
@@ -41,22 +42,23 @@ export default defineEventHandler(async (event) => {
     })
     .noUnknown()
     .validate(formData);
-  const media = useStorage("media");
+
   for (const part of multiPartDatas) {
     if (part.filename && part.type && part.name) {
-      const id = crypto.randomUUID();
-      await media.setItemRaw(
-        `${id}-${part.filename}`,
+      const md5 = await bufferMd5(part.data);
+      const key = `${md5}.${mime.getExtension(part.type)}`;
+      await event.context.mediaBucket.put(
+        key,
         new File([part.data], part.filename, { type: part.type }),
-        {
-          httpMetadata: {
-            contentType: part.type,
-          },
-        },
+        // {
+        //   httpMetadata: {
+        //     contentType: part.type,
+        //   },
+        // },
       );
       articleFields.content = articleFields.content.replace(
         part.name,
-        `/media/${id}-${part.filename}`,
+        `${event.context.cloudflare.env.MEDIA_BUCKET_PUBLIC_URL}/${key}`,
       );
     }
   }

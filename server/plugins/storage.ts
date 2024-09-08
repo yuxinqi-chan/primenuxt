@@ -1,11 +1,11 @@
-import cloudflareR2BindingDriver from "unstorage/drivers/cloudflare-r2-binding";
+import cloudflareKVBindingDriver from "unstorage/drivers/cloudflare-kv-binding";
 
 export default defineNitroPlugin((nitroApp) => {
   nitroApp.hooks.hook("request", (event) => {
     const storage = useStorage();
-    const driver = cloudflareR2BindingDriver({
-      binding: event.context.cloudflare.env.MEDIA_BUCKET,
+    const driver = cloudflareKVBindingDriver({
+      binding: event.context.cloudflare.env.KV,
     });
-    storage.mount("media", driver);
+    storage.mount("kv", driver);
   });
 });

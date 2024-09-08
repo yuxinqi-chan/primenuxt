@@ -26,6 +26,7 @@
     "@vee-validate/yup": "^4.13.2",
     "lodash": "^4.17.21",
     "lucia": "^3.2.0",
+    "mime": "^4.0.4",
     "nuxt": "^3.13.1",
     "nuxt-svgo-loader": "^0.4.1",
     "primeicons": "^7.0.0",
