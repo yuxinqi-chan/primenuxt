@@ -58,7 +58,7 @@ export default defineEventHandler(async (event) => {
       );
       articleFields.content = articleFields.content.replace(
         part.name,
-        `${event.context.cloudflare.env.MEDIA_BUCKET_PUBLIC_URL}/${key}`,
+        `${event.context.cloudflare.env.MEDIA_BUCKET_PUBLIC_URL || "/media"}/${key}`,
       );
     }
   }
