@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
     if (part.filename && part.type && part.name) {
       const id = crypto.randomUUID();
       await media.setItemRaw(
-        `${id}:${part.filename}`,
+        `${id}-${part.filename}`,
         new File([part.data], part.filename, { type: part.type }),
         {
           httpMetadata: {
@@ -56,7 +56,7 @@ export default defineEventHandler(async (event) => {
       );
       articleFields.content = articleFields.content.replace(
         part.name,
-        `/media/${id}/${part.filename}`,
+        `/media/${id}-${part.filename}`,
       );
     }
   }
