@@ -45,7 +45,7 @@ export default defineEventHandler(async (event) => {
 
   for (const part of multiPartDatas) {
     if (part.filename && part.type && part.name) {
-      const md5 = await bufferMd5(part.data);
+      const md5 = await bufferDigest(part.data);
       const key = `${md5}.${mime.getExtension(part.type)}`;
       await event.context.mediaBucket.put(
         key,

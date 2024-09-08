@@ -3,7 +3,7 @@
  * @param data
  * @returns
  */
-export const bufferMd5 = async (data: Buffer) => {
+export const bufferDigest = async (data: Buffer) => {
   const hashBuffer = await crypto.subtle.digest(
     { name: import.meta.dev ? "SHA-1" : "MD5" },
     data,
