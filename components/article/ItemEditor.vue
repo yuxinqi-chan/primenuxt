@@ -3,10 +3,15 @@ import { FetchError } from "ofetch";
 import type { SerializeObject } from "nitropack";
 import type { Prisma } from "@prisma/client";
 import type { AutoCompleteCompleteEvent } from "primevue/autocomplete";
+import type { ArticleImageUpload } from "#components";
 
 type TagGet = SerializeObject<Prisma.TagGetPayload<{}>>;
+type FileWithObjectURL = File & { objectURL: string };
+
 const router = useRouter();
 const toast = useToast();
+const imageUpload = ref<InstanceType<typeof ArticleImageUpload>>();
+const uploadFiles = computed(() => imageUpload.value?.fileUpload.files);
 let article = defineModel<{
   id?: number;
   title: string;
@@ -19,13 +24,12 @@ let article = defineModel<{
 }>({
   required: true,
 });
+
 const { data: tags } = await useFetch<TagGet[]>(`/api/tags`, {
   default: () => [],
 });
 const enteredTag = ref<TagGet | string>();
 const filteredTags = ref<TagGet[]>([]);
-const uploadFiles = reactive<Record<string, File>>({});
-
 function searchTag(event: AutoCompleteCompleteEvent) {
   filteredTags.value = tags.value.filter((tag) =>
     tag.name.toLowerCase().includes(event.query.toLowerCase()),
@@ -65,8 +69,8 @@ async function saveArticle() {
     formData.append("content", article.value.content);
     formData.append("published", String(article.value.published));
     formData.append("tags", JSON.stringify(article.value.tags));
-    for (const [key, file] of Object.entries(uploadFiles)) {
-      formData.append(key, file, file.name);
+    for (const file of uploadFiles.value) {
+      formData.append(file.objectURL, file);
     }
     if (article.value.id) {
       await $fetch(`/api/articles/${article.value.id}`, {
@@ -98,13 +102,9 @@ async function saveArticle() {
   }
 }
 
-async function editorLoad(editor: any) {
-  const Quill = (await import("quill")).default;
-  const Delta = Quill.import("delta");
-  Quill.import("formats/image").sanitize = (url: string) => {
-    return sanitize(url, ["http", "https", "data", "blob"]) ? url : "//:0";
-  };
-  editor.getModule("toolbar").addHandler("image", () => {
+async function editorLoad({ instance: quill }: any) {
+  const Delta = quill.constructor.import("delta");
+  quill.getModule("toolbar").addHandler("image", () => {
     const input = document.createElement("input");
     input.setAttribute("type", "file");
     input.setAttribute("accept", "image/*");
@@ -114,35 +114,48 @@ async function editorLoad(editor: any) {
         return;
       }
       const images = Array.from(input.files).map((file) => {
-        return {
-          url: URL.createObjectURL(file),
-          file,
-        };
+        const fileWithObjectURL = file as FileWithObjectURL;
+        fileWithObjectURL.objectURL = URL.createObjectURL(file);
+        return fileWithObjectURL;
       });
-      const range = editor.getSelection();
+      const range = quill.getSelection();
       const update = images.reduce((delta, image) => {
-        return delta.insert({ image: image.url });
+        return delta.insert({ image: image.objectURL });
       }, new Delta().retain(range.index).delete(range.length));
-      editor.updateContents(update, "user");
-      editor.setSelection(range.index + images.length, "silent");
+      quill.updateContents(update, "user");
+      quill.setSelection(range.index + images.length, "silent");
       images.forEach((image) => {
-        Object.assign(uploadFiles, { [image.url]: image.file });
+        uploadFiles.value.push(image);
       });
     };
   });
 }
 
-function sanitize(url: string, protocols: string[]) {
-  var anchor = document.createElement("a");
-  anchor.href = url;
+const modules = {
+  toolbar: [
+    ["bold", "italic", "underline", "strike"],
+    ["blockquote", "code-block"],
 
-  var protocol = anchor.href.slice(0, anchor.href.indexOf(":"));
-  return protocols.indexOf(protocol) > -1;
-}
+    [{ header: 1 }, { header: 2 }],
+    [{ list: "ordered" }, { list: "bullet" }],
+    [{ script: "sub" }, { script: "super" }],
+    [{ indent: "-1" }, { indent: "+1" }],
+    [{ direction: "rtl" }],
+
+    [{ size: ["small", false, "large", "huge"] }],
+    [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+    [{ color: [] }, { background: [] }],
+    [{ font: [] }],
+    [{ align: [] }],
+
+    ["clean"],
+  ],
+};
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-grow flex-col gap-4">
     <div class="flex justify-start">
       <Button
         link
@@ -183,11 +196,10 @@ function sanitize(url: string, protocols: string[]) {
         </InputGroup>
       </div>
     </div>
-    <Editor
-      ref="editor"
-      v-model="article.content"
-      class="flex flex-col"
-      @load="(e) => editorLoad(e.instance)" />
+    <ArticleImageUpload ref="imageUpload" />
+    <div>
+      <QuillEditor v-model="article.content" @load="editorLoad" />
+    </div>
     <div class="flex items-center justify-end gap-4">
       <label for="published" class="block font-bold">Published</label>
       <ToggleSwitch v-model="article.published" />
@@ -196,5 +208,3 @@ function sanitize(url: string, protocols: string[]) {
     </div>
   </div>
 </template>
-
-<style scoped></style>

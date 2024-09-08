@@ -1,6 +1,6 @@
 <template>
   <div v-auto-animate class="flex flex-col gap-4">
-    <ArticleCardItem
+    <ArticleItemCard
       v-animateonscroll="{
         enterClass: 'animate-scalein',
         leaveClass: 'animate-fadeout',

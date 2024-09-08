@@ -1,7 +1,6 @@
 import * as yup from "yup";
 
 export default defineEventHandler(async (event) => {
-  console.log(import.meta.dev);
   const { key } = await getYupRouterParams(
     event,
     yup.object({ key: yup.string().required() }),

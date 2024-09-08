@@ -41,6 +41,7 @@ export default defineNuxtConfig({
   ],
   primevue: {
     options: {
+      ripple: true,
       theme: {
         preset: Aura,
         options: {
