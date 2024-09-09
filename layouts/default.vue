@@ -9,7 +9,8 @@
       <div class="flex min-w-0 flex-grow flex-col">
         <slot />
       </div>
-      <Card class="h-fit w-72 flex-shrink-0 shadow-none max-lg:hidden"></Card>
+      <TagsCard
+        class="h-fit w-72 flex-shrink-0 shadow-none max-lg:hidden"></TagsCard>
     </main>
     <app-footer class="w-full"></app-footer>
   </div>

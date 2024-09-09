@@ -28,7 +28,7 @@ const summary = computed(() => {
       <NuxtLink
         class="transition-all duration-300 hover:text-primary"
         :to="`/articles/${article.id}`">
-        {{ article.title }}
+        <h1>{{ article.title }}</h1>
       </NuxtLink>
     </template>
     <template #content>
@@ -42,8 +42,7 @@ const summary = computed(() => {
           v-for="tag in article.tags"
           :key="tag.name"
           :value="tag.name"
-          severity="info"
-          rounded />
+          severity="info" />
       </div>
     </template>
   </Card>
