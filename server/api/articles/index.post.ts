@@ -43,10 +43,13 @@ export default defineEventHandler(async (event) => {
     if (part.filename && part.type && part.name) {
       const md5 = await bufferDigest(part.data);
       const key = `${md5}.${mime.getExtension(part.type)}`;
-      await event.context.mediaBucket.put(
-        key,
-        new File([part.data], part.filename, { type: part.type }),
-      );
+      const head = await event.context.mediaBucket.head(key);
+      if (!head) {
+        await event.context.mediaBucket.put(
+          key,
+          new File([part.data], part.filename, { type: part.type }),
+        );
+      }
       articleFields.content = articleFields.content.replace(
         part.name,
         `${event.context.cloudflare.env.MEDIA_BUCKET_PUBLIC_URL || "/media"}/${key}`,
