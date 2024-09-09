@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import mime from "mime";
 
 export default defineEventHandler(async (event) => {
   if (!event.context.user) {
@@ -23,7 +24,7 @@ export default defineEventHandler(async (event) => {
   const { tags, ...articleFields } = await yup
     .object({
       title: yup.string().min(1).max(100).required(),
-      image: yup.string().url().optional(),
+      image: yup.string().optional(),
       content: yup.string().min(1).required(),
       published: yup.boolean().required(),
       tags: yup
@@ -37,23 +38,22 @@ export default defineEventHandler(async (event) => {
     })
     .noUnknown()
     .validate(formData);
-  const media = useStorage("media");
+
   for (const part of multiPartDatas) {
     if (part.filename && part.type && part.name) {
-      const id = crypto.randomUUID();
-      await media.setItemRaw(
-        `${id}/${part.filename}`,
+      const md5 = await bufferDigest(part.data);
+      const key = `${md5}.${mime.getExtension(part.type)}`;
+      await event.context.mediaBucket.put(
+        key,
         new File([part.data], part.filename, { type: part.type }),
-        {
-          httpMetadata: {
-            contentType: part.type,
-          },
-        },
       );
       articleFields.content = articleFields.content.replace(
         part.name,
-        `/media/${id}/${part.filename}`,
+        `${event.context.cloudflare.env.MEDIA_BUCKET_PUBLIC_URL || "/media"}/${key}`,
       );
+      if (articleFields.image === part.name) {
+        articleFields.image = `${event.context.cloudflare.env.MEDIA_BUCKET_PUBLIC_URL || "/media"}/${key}`;
+      }
     }
   }
   const prisma = usePrisma(event);

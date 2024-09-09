@@ -120,12 +120,8 @@ const publishedMutation = useMutation({
         <Column field="id" header="Id" style="width: 5rem" sortable></Column>
         <Column field="title" header="Title" style="min-width: 12rem"></Column>
         <Column header="Image">
-          <template #body="slotProps">
-            <img
-              :src="`https://primefaces.org/cdn/primevue/images/product/${slotProps.data.image}`"
-              :alt="slotProps.data.image"
-              class="rounded"
-              style="width: 64px" />
+          <template #body="{ data }: { data: ArticleGet }">
+            <img :src="data.image || ''" class="rounded" style="width: 64px" />
           </template>
         </Column>
         <Column

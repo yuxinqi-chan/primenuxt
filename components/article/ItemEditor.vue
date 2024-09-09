@@ -15,6 +15,7 @@ const uploadFiles = computed(() => imageUpload.value?.fileUpload.files);
 let article = defineModel<{
   id?: number;
   title: string;
+  image?: string | null;
   content: string;
   tags: {
     name: string;
@@ -67,6 +68,7 @@ async function saveArticle() {
     const formData = new FormData();
     formData.append("title", article.value.title);
     formData.append("content", article.value.content);
+    article.value.image && formData.append("image", article.value.image);
     formData.append("published", String(article.value.published));
     formData.append("tags", JSON.stringify(article.value.tags));
     for (const file of uploadFiles.value) {
@@ -196,7 +198,7 @@ const modules = {
         </InputGroup>
       </div>
     </div>
-    <ArticleImageUpload ref="imageUpload" />
+    <ArticleImageUpload ref="imageUpload" v-model:cover="article.image" />
     <div>
       <QuillEditor v-model="article.content" @load="editorLoad" />
     </div>

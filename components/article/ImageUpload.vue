@@ -7,7 +7,7 @@
       @upload="onTemplatedUpload()"
       :multiple="true"
       accept="image/*"
-      :maxFileSize="1000000"
+      :maxFileSize="1024 * 1024 * 10"
       @select="onSelectedFiles">
       <template
         #header="{ chooseCallback, uploadCallback, clearCallback, files }">
@@ -49,36 +49,45 @@
           removeUploadedFileCallback,
           removeFileCallback,
         }">
-        <div class="flex flex-col gap-8 pt-4">
+        <div class="flex flex-col gap-8">
           <div v-if="files.length > 0">
-            <h5>Pending</h5>
             <div class="flex flex-wrap gap-4">
               <div
                 v-for="(file, index) of files as FileWithObjectURL[]"
                 :key="file.name + file.type + file.size"
-                class="flex flex-col items-center gap-4 border p-8 border-surface rounded-border">
-                <div>
-                  <img
-                    role="presentation"
-                    :alt="file.name"
-                    :src="file.objectURL"
-                    width="100"
-                    height="50" />
-                </div>
-                <span
-                  class="max-w-60 overflow-hidden text-ellipsis whitespace-nowrap font-semibold">
+                class="flex max-w-56 flex-col items-center gap-1 border p-2 border-surface rounded-border">
+                <img
+                  role="presentation"
+                  :alt="file.name"
+                  :src="file.objectURL"
+                  class="h-28 max-w-56 object-contain"
+                  height="112"
+                  width="100%" />
+                <div
+                  class="w-full overflow-hidden text-ellipsis whitespace-nowrap text-center font-semibold">
                   {{ file.name }}
-                </span>
+                </div>
                 <div>{{ formatSize(file.size) }}</div>
-                <Badge value="Pending" severity="warn" />
-                <Button
-                  icon="pi pi-times"
-                  @click="
-                    onRemoveTemplatingFile(file, removeFileCallback, index)
-                  "
-                  outlined
-                  rounded
-                  severity="danger" />
+                <div class="flex gap-2">
+                  <Button
+                    title="Set as cover"
+                    :icon="
+                      coverModel === file.objectURL
+                        ? 'pi pi-flag-fill'
+                        : 'pi pi-flag'
+                    "
+                    @click="coverModel = file.objectURL"
+                    outlined
+                    rounded />
+                  <Button
+                    icon="pi pi-times"
+                    @click="
+                      onRemoveTemplatingFile(file, removeFileCallback, index)
+                    "
+                    outlined
+                    rounded
+                    severity="danger" />
+                </div>
               </div>
             </div>
           </div>
@@ -127,10 +136,7 @@
 </template>
 
 <script lang="ts" setup>
-import type {
-  FileUploadMethods,
-  FileUploadSelectEvent,
-} from "primevue/fileupload";
+import type { FileUploadSelectEvent } from "primevue/fileupload";
 
 type FileWithObjectURL = File & { objectURL: string };
 
@@ -143,18 +149,22 @@ const files = ref<FileWithObjectURL[]>([]);
 
 const fileUpload = ref();
 
+const coverModel = defineModel<string | null | undefined>("cover");
 defineExpose({
   fileUpload,
 });
 
 const onRemoveTemplatingFile = (
-  file: File,
+  file: FileWithObjectURL,
   removeFileCallback: (index: number) => void,
   index: number,
 ) => {
   removeFileCallback(index);
   totalSize.value -= parseInt(formatSize(file.size));
   totalSizePercent.value = totalSize.value / 10;
+  if (coverModel.value === file.objectURL) {
+    coverModel.value = "";
+  }
 };
 
 const onClearTemplatingUpload = (clear: () => void) => {

@@ -14,7 +14,11 @@ body {
   font-family: "Lato", sans-serif;
   background-color: var(--surface-ground);
 }
-
+.ql-snow {
+  img {
+    display: inline-block;
+  }
+}
 .page-enter-active,
 .page-leave-active {
   transition: all 0.4s;
@@ -24,7 +28,7 @@ body {
   opacity: 0;
   filter: blur(1rem);
 }
-
+@import "@enzedonline/quill-blot-formatter2/dist/css/quill-blot-formatter2.css";
 @import "primeicons/primeicons.css";
 @import "quill/dist/quill.core.css";
 @import "quill/dist/quill.snow.css";

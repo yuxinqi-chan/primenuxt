@@ -28,7 +28,7 @@ export default defineEventHandler(async (event) => {
   const { tags, ...articleFields } = await yup
     .object({
       title: yup.string().min(1).max(100).required(),
-      image: yup.string().url().optional(),
+      image: yup.string().optional(),
       content: yup.string().min(1).required(),
       published: yup.boolean().required(),
       tags: yup
@@ -50,16 +50,14 @@ export default defineEventHandler(async (event) => {
       await event.context.mediaBucket.put(
         key,
         new File([part.data], part.filename, { type: part.type }),
-        // {
-        //   httpMetadata: {
-        //     contentType: part.type,
-        //   },
-        // },
       );
       articleFields.content = articleFields.content.replace(
         part.name,
         `${event.context.cloudflare.env.MEDIA_BUCKET_PUBLIC_URL || "/media"}/${key}`,
       );
+      if (articleFields.image === part.name) {
+        articleFields.image = `${event.context.cloudflare.env.MEDIA_BUCKET_PUBLIC_URL || "/media"}/${key}`;
+      }
     }
   }
   const prisma = usePrisma(event);
@@ -76,11 +74,5 @@ export default defineEventHandler(async (event) => {
       },
     },
   });
-  if (!article) {
-    throw createError({
-      statusCode: 404,
-      statusMessage: "not found",
-    });
-  }
   return article;
 });
