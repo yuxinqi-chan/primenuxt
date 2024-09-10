@@ -6,7 +6,6 @@
 const props = defineProps<{
   path: string;
 }>();
-console.log(props.path);
 const { $KV } = useNuxtApp();
 const PREFIX = "viewer-count";
 const count = Number((await $KV?.get(`${PREFIX}:${props.path}`)) || 0);
