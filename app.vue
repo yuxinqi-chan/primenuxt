@@ -4,7 +4,3 @@
     <NuxtPage />
   </NuxtLayout>
 </template>
-<script setup>
-import "dayjs/locale/zh-cn";
-dayjs.locale("zh-cn");
-</script>
