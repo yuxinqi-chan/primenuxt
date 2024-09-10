@@ -6,6 +6,8 @@ export default defineNuxtPlugin(() => {
   return {
     provide: {
       ...event?.context.cloudflare.env,
+      cf: event?.context.cf,
+      headers: event?.headers,
     },
   };
 });
