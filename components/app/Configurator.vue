@@ -1,25 +1,19 @@
 <script setup lang="ts">
 import { $t, updatePreset, updateSurfacePalette } from "@primevue/themes";
+import Aura from "@primevue/themes/aura";
+import Lara from "@primevue/themes/lara";
 import type { ThemeColor } from "~/types/layout";
 
+const presets = {
+  Aura,
+  Lara,
+};
+
 const appConfig = useAppConfig();
-const {
-  presets,
-  layoutConfig,
-  setPrimary,
-  setSurface,
-  setPreset,
-  isDarkTheme,
-} = useLayout();
+const layout = useLayoutStore();
 
-const preset = ref(layoutConfig.preset);
-const presetOptions = ref(Object.keys(presets));
-
-const menuMode = ref(layoutConfig.menuMode);
-const menuModeOptions = ref([
-  { label: "Static", value: "static" },
-  { label: "Overlay", value: "overlay" },
-]);
+const preset = ref(layout.preset);
+const presetOptions = ref(layout.presets);
 
 const primaryColors = appConfig.primaryColors;
 
@@ -163,7 +157,7 @@ const surfaces = ref([
 ]);
 
 function getPresetExt() {
-  const color = primaryColors.find((c) => c.name === layoutConfig.primary);
+  const color = primaryColors.find((c) => c.name === layout.primary);
 
   if (color?.name === "noir") {
     return {
@@ -255,9 +249,9 @@ function getPresetExt() {
 
 function updateColors(type: string, color: ThemeColor) {
   if (type === "primary") {
-    setPrimary(color.name);
+    layout.primary = color.name;
   } else if (type === "surface") {
-    setSurface(color.name);
+    layout.surface = color.name;
   }
 
   applyTheme(type, color);
@@ -272,10 +266,10 @@ function applyTheme(type: string, color: ThemeColor) {
 }
 
 function onPresetChange() {
-  setPreset(preset.value);
+  layout.preset = preset.value;
   const presetValue = presets[preset.value];
   const surfacePalette = surfaces.value.find(
-    (s) => s.name === layoutConfig.surface,
+    (s) => s.name === layout.surface,
   )?.palette;
 
   $t()
@@ -299,7 +293,7 @@ function onPresetChange() {
           @click="updateColors('primary', primaryColor)"
           :class="[
             'h-5 w-5 cursor-pointer rounded-full border-none p-0 outline-none outline-offset-1',
-            { 'outline-primary': layoutConfig.primary === primaryColor.name },
+            { 'outline-primary': layout.primary === primaryColor.name },
           ]"
           :style="{
             backgroundColor: `${
@@ -322,9 +316,9 @@ function onPresetChange() {
           :class="[
             'h-5 w-5 cursor-pointer rounded-full border-none p-0 outline-none outline-offset-1',
             {
-              'outline-primary': layoutConfig.surface
-                ? layoutConfig.surface === surface.name
-                : isDarkTheme
+              'outline-primary': layout.surface
+                ? layout.surface === surface.name
+                : layout.darkTheme
                   ? surface.name === 'zinc'
                   : surface.name === 'slate',
             },

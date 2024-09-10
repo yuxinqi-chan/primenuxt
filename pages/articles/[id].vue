@@ -22,13 +22,7 @@ const wordCount = computed(() => {
       <div class="flex flex-wrap items-center gap-2 text-sm">
         <div class="flex items-center gap-1">
           <i class="pi pi-calendar text-sm"></i>
-          <time :datetime="dayjs(article?.createdAt).utc().toString()">
-            {{
-              dayjsLocale(article?.createdAt, "zh-cn", $cf.timezone).format(
-                "LL LTS",
-              )
-            }}
-          </time>
+          <DateTime :date="article.createdAt" format="LL LTS" />
         </div>
         <div class="flex items-center gap-1">
           <i class="pi pi-eye text-sm"></i>
@@ -36,7 +30,7 @@ const wordCount = computed(() => {
         </div>
         <div class="flex items-center gap-1">
           <i class="pi pi-pencil text-sm"></i>
-          <span>{{ wordCount }}字</span>
+          <span>{{ wordCount }} {{ $t("words") }}</span>
         </div>
         <div class="flex flex-wrap gap-1">
           <Tag

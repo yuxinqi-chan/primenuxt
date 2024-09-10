@@ -1,13 +1,6 @@
-<script setup lang="ts">
-const props = defineProps<{
-  class?: string;
-}>();
-</script>
-
 <template>
   <div
-    class="flex items-center justify-center gap-2 border-t border-solid border-[var(--p-content-border-color)] py-4"
-    :class="props.class">
+    class="flex items-center justify-center gap-2 border-t border-solid border-[var(--p-content-border-color)] py-4">
     SAKAI by
     <a
       href="https://primevue.org"

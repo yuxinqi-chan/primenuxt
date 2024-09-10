@@ -5,9 +5,11 @@ import timezone from "dayjs/plugin/timezone";
 import isBetween from "dayjs/plugin/isBetween";
 import duration from "dayjs/plugin/duration";
 import localizedFormat from "dayjs/plugin/localizedFormat";
-import updateLocale from "dayjs/plugin/updateLocale";
+import advancedFormat from "dayjs/plugin/advancedFormat";
+
 import en from "dayjs/locale/en";
 import zhCn from "dayjs/locale/zh-cn";
+import zh from "dayjs/locale/zh";
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -15,19 +17,20 @@ dayjs.extend(timezone);
 dayjs.extend(isBetween);
 dayjs.extend(duration);
 dayjs.extend(localizedFormat);
-dayjs.extend(updateLocale);
+dayjs.extend(advancedFormat);
 const locales = {
   en: en,
   "zh-cn": zhCn,
+  zh: zh,
 };
 export const dayjsLocale = (
   date?: dayjs.ConfigType,
-  locale?: keyof typeof locales,
+  locale?: string,
   timezone?: string,
 ) => {
   let d = dayjs(date);
-  if (locale && locales[locale]) {
-    d = d.locale(locales[locale]);
+  if (locale && locales[locale as keyof typeof locales]) {
+    d = d.locale(locales[locale as keyof typeof locales]);
   } else {
     d = d.locale(locales.en);
   }

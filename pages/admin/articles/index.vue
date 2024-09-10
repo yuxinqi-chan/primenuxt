@@ -73,21 +73,24 @@ const publishedMutation = useMutation({
       <Toolbar class="mb-6">
         <template #start>
           <Button
-            label="New"
+            :label="$t('create')"
             icon="pi pi-plus"
             severity="secondary"
             class="mr-2"
             :as="NuxtLink"
             to="/admin/articles/new" />
           <Button
-            label="Delete"
+            :label="$t('delete')"
             icon="pi pi-trash"
             severity="secondary"
             @click="deleteArticlesDialog = true"
             :disabled="!selectedArticles.length" />
         </template>
         <template #end>
-          <Button label="Export" icon="pi pi-upload" severity="secondary" />
+          <Button
+            :label="$t('export')"
+            icon="pi pi-upload"
+            severity="secondary" />
         </template>
       </Toolbar>
       <DataTable
@@ -102,14 +105,14 @@ const publishedMutation = useMutation({
         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products">
         <template #header>
           <div class="flex flex-wrap items-center justify-between gap-2">
-            <h4 class="m-0">Manage Products</h4>
+            <h4 class="m-0">{{ $t("manageArticles") }}</h4>
             <IconField>
               <InputIcon>
                 <i class="pi pi-search" />
               </InputIcon>
               <InputText
                 v-model="filters['global'].value"
-                placeholder="Search..." />
+                :placeholder="$t('searchEllipsis')" />
             </IconField>
           </div>
         </template>
@@ -118,15 +121,18 @@ const publishedMutation = useMutation({
           style="width: 3rem"
           :exportable="false"></Column>
         <Column field="id" header="Id" style="width: 5rem" sortable></Column>
-        <Column field="title" header="Title" style="min-width: 12rem"></Column>
-        <Column header="Image">
+        <Column
+          field="title"
+          :header="$t('title')"
+          style="min-width: 12rem"></Column>
+        <Column :header="$t('image')">
           <template #body="{ data }: { data: ArticleGet }">
             <img :src="data.image || ''" class="rounded" style="width: 64px" />
           </template>
         </Column>
         <Column
           field="published"
-          header="Published"
+          :header="$t('publish')"
           sortable
           style="min-width: 12rem">
           <template #body="{ data }: { data: ArticleGet }">
@@ -135,7 +141,10 @@ const publishedMutation = useMutation({
               @change="publishedMutation.mutate(data)" />
           </template>
         </Column>
-        <Column :exportable="false" style="min-width: 12rem">
+        <Column
+          :header="$t('action')"
+          :exportable="false"
+          style="min-width: 12rem">
           <template #body="{ data }: { data: ArticleGet }">
             <NuxtLink
               class="p-button p-component p-button-icon-only p-button-rounded p-button-outlined mr-2"
@@ -154,42 +163,48 @@ const publishedMutation = useMutation({
       <Dialog
         v-model:visible="deletingDialog"
         :style="{ width: '450px' }"
-        header="Confirm"
+        :header="$t('confirm')"
         :modal="true">
         <div class="flex items-center gap-4">
           <i class="pi pi-exclamation-triangle !text-3xl" />
           <span v-if="deletingArticle">
-            Are you sure you want to delete
+            {{ $t("sureToDelete") }}
             <b>{{ deletingArticle.title }}</b>
-            ?
+            {{ $t("questionMark") }}
           </span>
         </div>
         <template #footer>
           <Button
-            label="No"
+            :label="$t('no')"
             icon="pi pi-times"
             text
             @click="deletingArticle = undefined" />
-          <Button label="Yes" icon="pi pi-check" @click="deleteArticle" />
+          <Button
+            :label="$t('yes')"
+            icon="pi pi-check"
+            @click="deleteArticle" />
         </template>
       </Dialog>
       <Dialog
         v-model:visible="deleteArticlesDialog"
         :style="{ width: '450px' }"
-        header="Confirm"
+        :header="$t('confirm')"
         :modal="true">
         <div class="flex items-center gap-4">
           <i class="pi pi-exclamation-triangle !text-3xl" />
-          <span>Are you sure you want to delete the selected articles?</span>
+          <span>
+            {{ $t("sureToDeleteSelected") }} {{ selectedArticles.length }}
+            {{ $t("articles") }}{{ $t("questionMark") }}
+          </span>
         </div>
         <template #footer>
           <Button
-            label="No"
+            :label="$t('no')"
             icon="pi pi-times"
             text
             @click="deleteArticlesDialog = false" />
           <Button
-            label="Yes"
+            :label="$t('yes')"
             icon="pi pi-check"
             text
             @click="deleteSelectedArticles" />

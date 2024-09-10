@@ -259,28 +259,6 @@ const primaryColors: ThemeColor[] = [
     },
   },
 ];
-const menuItems: MenuItem[] = [
-  {
-    label: "Home",
-    items: [{ label: "Dashboard", icon: "pi pi-fw pi-home", to: "/admin" }],
-  },
-  {
-    label: "资源管理",
-    items: [
-      {
-        label: "文章",
-        icon: "pi pi-fw pi-pen-to-square",
-        to: "/admin/articles",
-      },
-      {
-        label: "账号",
-        icon: "pi pi-fw pi-user",
-        to: "/admin/account",
-      },
-    ],
-  },
-];
 export default defineAppConfig({
-  menuItems,
   primaryColors,
 });

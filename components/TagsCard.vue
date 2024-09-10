@@ -1,6 +1,6 @@
 <template>
   <Card>
-    <template #title>标签云</template>
+    <template #title>{{ $t("tagCloud") }}</template>
     <template #content>
       <div class="flex flex-wrap gap-1 after:flex-grow-[10]">
         <Tag

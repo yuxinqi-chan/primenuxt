@@ -128,7 +128,7 @@
         <div class="flex flex-col items-center justify-center">
           <i
             class="pi pi-cloud-upload !rounded-full !border-2 !p-8 !text-4xl !text-muted-color" />
-          <p class="mb-0 mt-6">Drag and drop files to here to upload.</p>
+          <p class="mb-0 mt-6">{{ $t("dragAndDropToUpload") }}</p>
         </div>
       </template>
     </FileUpload>

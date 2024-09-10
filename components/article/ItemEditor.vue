@@ -161,12 +161,12 @@ const modules = {
     <div class="flex justify-start">
       <Button
         link
-        label="Back"
+        :label="$t('back')"
         icon="pi pi-arrow-left"
         @click="$router.back()" />
     </div>
     <div>
-      <label for="title" class="mb-3 block font-bold">Title</label>
+      <label for="title" class="mb-3 block font-bold">{{ $t("title") }}</label>
       <InputText
         id="title"
         v-model.trim="article.title"
@@ -174,12 +174,9 @@ const modules = {
         autofocus
         :invalid="!article.title"
         fluid />
-      <small v-if="!article.title" class="text-red-500">
-        Name is required.
-      </small>
     </div>
     <div>
-      <label for="tags" class="mb-3 block font-bold">Tags</label>
+      <label for="tags" class="mb-3 block font-bold">{{ $t("tags") }}</label>
       <div class="flex flex-wrap gap-2">
         <Chip
           v-for="tag in article.tags"
@@ -203,10 +200,16 @@ const modules = {
       <QuillEditor v-model="article.content" @load="editorLoad" />
     </div>
     <div class="flex items-center justify-end gap-4">
-      <label for="published" class="block font-bold">Published</label>
+      <label for="published" class="block font-bold">
+        {{ $t("publish") }}
+      </label>
       <ToggleSwitch v-model="article.published" />
-      <Button label="Cancel" icon="pi pi-times" text @click="$router.back()" />
-      <Button label="Save" icon="pi pi-check" @click="saveArticle" />
+      <Button
+        :label="$t('cancel')"
+        icon="pi pi-times"
+        text
+        @click="$router.back()" />
+      <Button :label="$t('save')" icon="pi pi-check" @click="saveArticle" />
     </div>
   </div>
 </template>

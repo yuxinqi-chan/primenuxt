@@ -8,6 +8,8 @@ const { article } = defineProps<{
     tags: {
       name: string;
     }[];
+    createdAt: Date | string | number;
+    updatedAt: Date | string | number;
   };
 }>();
 const summary = computed(() => {
@@ -30,6 +32,12 @@ const summary = computed(() => {
         :to="`/articles/${article.id}`">
         <h1>{{ article.title }}</h1>
       </NuxtLink>
+    </template>
+    <template #subtitle>
+      <div class="flex items-center gap-1 text-sm">
+        <i class="pi pi-calendar"></i>
+        <DateTime :date="article.createdAt" format="LL" />
+      </div>
     </template>
     <template #content>
       <NuxtLink :to="`/articles/${article.id}`">

@@ -6,12 +6,10 @@ import type { PopoverMethods } from "primevue/popover";
 import { FetchError } from "ofetch";
 import Logo from "~/assets/icons/logo.svg?component";
 
-const props = defineProps<{
-  class?: string;
-}>();
+const { t } = useI18n();
 const toast = useToast();
-const { user, logout } = useAuth();
-const { toggleDarkMode, isDarkTheme, sidebarDrawerVisible } = useLayout();
+const session = useSessionStore();
+const layout = useLayoutStore();
 const themeConfiguratorPopover = ref<PopoverMethods | null>(null);
 const toggleThemeConfiguratorPopover = (event: Event) => {
   themeConfiguratorPopover.value?.toggle(event);
@@ -26,15 +24,15 @@ const toggleMobileMenu = (event: Event) => {
 };
 const userMenuItems = ref<MenuItem[]>([
   {
-    label: "登出",
+    label: t("logout"),
     icon: "pi pi-sign-out",
     command: async () => {
       try {
-        await logout();
+        await session.logout();
         toast.add({
           severity: "success",
-          summary: "登出成功",
-          detail: "欢迎下次光临",
+          summary: t("logoutSuccess"),
+          detail: t("logoutSuccess"),
           life: 3000,
         });
         navigateTo("/");
@@ -42,7 +40,7 @@ const userMenuItems = ref<MenuItem[]>([
         if (error instanceof FetchError) {
           toast.add({
             severity: "error",
-            summary: "登出失败",
+            summary: t("logoutFailed"),
             detail: error.statusMessage,
             life: 3000,
           });
@@ -53,7 +51,7 @@ const userMenuItems = ref<MenuItem[]>([
 ]);
 const mobileMenuItems = ref<MenuItem[]>([
   {
-    label: "后台管理",
+    label: t("adminPanel"),
     icon: "pi pi-wrench",
     command: () => {
       navigateTo("/admin");
@@ -64,19 +62,38 @@ const mobileMenuItems = ref<MenuItem[]>([
   },
   ...userMenuItems.value,
 ]);
+const { locale, localeCodes, setLocale } = useI18n();
+
+const localesOptions = computed(() =>
+  localeCodes.value.map((i) => {
+    const languageNames = new Intl.DisplayNames([String(i)], {
+      type: "language",
+    });
+    return {
+      label: languageNames.of(String(i)),
+      value: String(i),
+      command: () => {
+        setLocale(String(i));
+      },
+    };
+  }),
+);
+const languageMenu = ref<MenuMethods | null>(null);
+const toggleLanguageMenu = (event: Event) => {
+  languageMenu.value?.toggle(event);
+};
 </script>
 
 <template>
   <div
-    class="flex h-16 w-full items-center bg-[var(--p-content-background)] px-8 lg:px-8"
-    :class="props.class">
+    class="flex h-16 w-full items-center bg-[var(--p-content-background)] px-8 lg:px-8">
     <div class="flex w-80 items-center lg:w-auto">
       <Button
-        v-if="user && !$route.path.startsWith('/admin')"
+        v-if="session.user && !$route.path.startsWith('/admin')"
         class="lg:hidden"
         icon="pi pi-bars"
         size="large"
-        @click="sidebarDrawerVisible = true"
+        @click="layout.sidebarDrawerVisible = true"
         rounded
         text
         severity="secondary" />
@@ -91,13 +108,39 @@ const mobileMenuItems = ref<MenuItem[]>([
       <Button
         type="button"
         rounded
-        @click="toggleDarkMode"
-        :icon="isDarkTheme ? 'pi pi-sun' : 'pi pi-moon'"
+        @click="toggleLanguageMenu"
+        icon="pi pi-language"
+        severity="secondary"
+        text
+        size="large"
+        aria-controls="language-menu" />
+      <Menu
+        class="min-w-fit"
+        ref="languageMenu"
+        id="language-menu"
+        :model="localesOptions"
+        :popup="true">
+        <template #item="{ item }">
+          <Button
+            :severity="locale === item.value ? 'primary' : 'secondary'"
+            :disabled="locale === item.value"
+            text
+            size="small"
+            @click="setLocale(item.value)">
+            {{ item.label }}
+          </Button>
+        </template>
+      </Menu>
+      <Button
+        type="button"
+        rounded
+        @click="layout.toogleDarkTheme"
+        :icon="layout.darkTheme ? 'pi pi-sun' : 'pi pi-moon'"
         severity="secondary"
         text
         size="large" />
       <Button
-        v-if="!user"
+        v-if="!session.user"
         type="button"
         rounded
         severity="secondary"
@@ -107,14 +150,14 @@ const mobileMenuItems = ref<MenuItem[]>([
         :as="NuxtLink"
         to="/login" />
       <Button
-        v-if="user"
+        v-if="session.user"
         icon="pi pi-palette"
         type="button"
         size="large"
         rounded
         @click="toggleThemeConfiguratorPopover" />
       <Button
-        v-if="user"
+        v-if="session.user"
         icon="pi pi-ellipsis-v"
         class="lg:hidden"
         size="large"
@@ -124,7 +167,8 @@ const mobileMenuItems = ref<MenuItem[]>([
         rounded
         @click="toggleMobileMenu" />
       <Button
-        v-if="user"
+        v-if="session.user"
+        :title="t('adminPanel')"
         type="button"
         icon="pi pi-wrench"
         severity="secondary"
@@ -135,7 +179,7 @@ const mobileMenuItems = ref<MenuItem[]>([
         :as="NuxtLink"
         to="/admin" />
       <Button
-        v-if="user"
+        v-if="session.user"
         type="button"
         icon="pi pi-user"
         severity="secondary"

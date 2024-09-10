@@ -14,8 +14,7 @@
       <TagsCard
         class="h-fit w-72 flex-shrink-0 shadow-none max-lg:hidden"></TagsCard>
     </main>
+    <ScrollTop />
     <app-footer class="w-full"></app-footer>
   </div>
-  <Toast />
-  <ScrollTop />
 </template>

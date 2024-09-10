@@ -8,7 +8,7 @@ definePageMeta({
 });
 
 const toast = useToast();
-const { login, initAdmin } = useAuth();
+const session = useSessionStore();
 const { data: isInitialized } = await useFetch("/api/auth/init", {
   method: "get",
   default: () => false,
@@ -20,7 +20,7 @@ const checked = ref(false);
 const { status: initStatus, execute: initExecute } = await useAsyncData(
   async () => {
     try {
-      await initAdmin();
+      await session.initAdmin();
       toast.add({
         severity: "success",
         summary: "Admin initialized",
@@ -44,7 +44,7 @@ const { status: initStatus, execute: initExecute } = await useAsyncData(
 const { status: loginStatus, execute: loginExecute } = await useAsyncData(
   async () => {
     try {
-      await login(email, password);
+      await session.login(email, password);
       toast.add({
         severity: "success",
         summary: "Login Successful",
@@ -88,10 +88,10 @@ const { status: loginStatus, execute: loginExecute } = await useAsyncData(
             <Logo class="mx-auto mb-8 w-16 shrink-0" />
             <div
               class="mb-4 text-3xl font-medium text-surface-900 dark:text-surface-0">
-              Welcome to PrimeLand!
+              {{ $t("welcome") }}
             </div>
             <span class="font-medium text-muted-color">
-              Sign in to continue
+              {{ $t("signInToContinue") }}
             </span>
           </div>
 
@@ -99,24 +99,24 @@ const { status: loginStatus, execute: loginExecute } = await useAsyncData(
             <label
               for="email1"
               class="mb-2 block text-xl font-medium text-surface-900 dark:text-surface-0">
-              Email
+              {{ $t("email") }}
             </label>
             <InputText
               id="email1"
               type="text"
-              placeholder="Email address"
+              :placeholder="$t('emailAddress')"
               class="mb-8 w-full md:w-[30rem]"
               v-model="email" />
 
             <label
               for="password1"
               class="mb-2 block text-xl font-medium text-surface-900 dark:text-surface-0">
-              Password
+              {{ $t("password") }}
             </label>
             <Password
               id="password1"
               v-model="password"
-              placeholder="Password"
+              :placeholder="$t('password')"
               :toggleMask="true"
               class="mb-4"
               fluid
@@ -129,11 +129,11 @@ const { status: loginStatus, execute: loginExecute } = await useAsyncData(
                   id="rememberme1"
                   binary
                   class="mr-2"></Checkbox>
-                <label for="rememberme1">Remember me</label>
+                <label for="rememberme1">{{ $t("rememberMe") }}</label>
               </div>
               <span
                 class="ml-2 cursor-pointer text-right font-medium text-primary no-underline">
-                Forgot password?
+                {{ $t("forgotPassword") }}
               </span>
             </div>
             <Button
@@ -145,7 +145,7 @@ const { status: loginStatus, execute: loginExecute } = await useAsyncData(
               v-if="!isInitialized" />
             <Button
               :disabled="!email || !password"
-              label="Sign In"
+              :label="$t('login')"
               class="w-full"
               @click="loginExecute()"
               :loading="loginStatus === 'pending'"
@@ -155,5 +155,4 @@ const { status: loginStatus, execute: loginExecute } = await useAsyncData(
       </div>
     </div>
   </div>
-  <Toast />
 </template>

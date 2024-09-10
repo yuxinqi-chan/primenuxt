@@ -6,11 +6,11 @@ definePageMeta({
   layout: "admin",
   middleware: ["auth"],
 });
-const { user } = useAuth();
+const session = useSessionStore();
 const toast = useToast();
 const validationSchema = toTypedSchema(
   yup.object({
-    username: yup.string().required().min(6).default(user.value!.username),
+    username: yup.string().required().min(6).default(session.user!.username),
     password: yup.string().required().min(6),
     confirmPassword: yup
       .string()
@@ -29,7 +29,7 @@ const confirmPassword = defineField("confirmPassword")[0];
 const { data, execute: save } = await useAsyncData(
   async () => {
     try {
-      await $fetch(`/api/users/${user.value?.id}`, {
+      await $fetch(`/api/users/${session.user?.id}`, {
         method: "PUT",
         body: values,
       });
@@ -55,13 +55,13 @@ const { data, execute: save } = await useAsyncData(
 );
 </script>
 <template>
-  <Card v-if="user" class="mx-auto w-full max-w-2xl shadow-none">
+  <Card v-if="session.user" class="mx-auto w-full max-w-2xl shadow-none">
     <template #title>
-      <h1>Account</h1>
+      <h1>{{ $t("account") }}</h1>
     </template>
     <template #content>
       <div class="flex flex-col gap-2">
-        <label for="username">Username</label>
+        <label for="username">{{ $t("username") }}</label>
         <InputText
           id="username"
           v-model="username"
@@ -69,7 +69,7 @@ const { data, execute: save } = await useAsyncData(
         <small v-if="errors.username" class="text-red-500">
           {{ errors.username }}
         </small>
-        <label for="password">Password</label>
+        <label for="password">{{ $t("password") }}</label>
         <Password
           id="password"
           fluid
@@ -78,7 +78,7 @@ const { data, execute: save } = await useAsyncData(
         <small v-if="errors.password" class="text-red-500">
           {{ errors.password }}
         </small>
-        <label for="confirmPassword">Confirm Password</label>
+        <label for="confirmPassword">{{ $t("confirmPassword") }}</label>
         <Password
           id="confirmPassword"
           fluid
@@ -90,7 +90,9 @@ const { data, execute: save } = await useAsyncData(
       </div>
     </template>
     <template #footer>
-      <Button label="Save" @click="save()" />
+      <div class="flex items-center justify-end gap-4">
+        <Button :label="$t('save')" @click="save()" />
+      </div>
     </template>
   </Card>
 </template>
