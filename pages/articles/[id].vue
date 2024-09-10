@@ -6,7 +6,7 @@ const { data: article } = await useFetch(`/api/articles/${id}`);
 const wordCount = computed(() => {
   return article.value?.content.replace(/<[^>]*>?/g, "").length;
 });
-const createdAt = dayjs(article.value?.createdAt).locale("zh-cn");
+const createdAt = dayjs(article.value?.createdAt).locale("zh-cn", {});
 </script>
 <template>
   <Card v-if="article">
