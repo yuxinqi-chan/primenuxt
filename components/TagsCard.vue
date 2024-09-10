@@ -2,7 +2,7 @@
   <Card>
     <template #title>标签云</template>
     <template #content>
-      <div class="flex flex-wrap gap-2 after:flex-grow-[10]">
+      <div class="flex flex-wrap gap-1 after:flex-grow-[10]">
         <Tag
           class="flex-grow"
           v-for="tag in sortedTags"

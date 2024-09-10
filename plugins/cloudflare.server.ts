@@ -1,13 +1,9 @@
-import { useRequestEvent } from "#imports";
-
 export default defineNuxtPlugin(() => {
   const event = useRequestEvent();
-
+  const ip = event?.headers.get("CF-Connecting-IP");
   return {
     provide: {
-      ...event?.context.cloudflare.env,
-      cf: event?.context.cf,
-      headers: event?.headers,
+      cf: { ...event?.context.cf, ip },
     },
   };
 });

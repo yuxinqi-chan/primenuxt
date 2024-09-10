@@ -34,7 +34,7 @@ const wordCount = computed(() => {
           <i class="pi pi-pencil text-sm"></i>
           <span>{{ wordCount }}字</span>
         </div>
-        <div class="flex items-center gap-1">
+        <div class="flex flex-wrap gap-1">
           <Tag
             v-for="tag in article.tags"
             :key="tag.name"

@@ -6,10 +6,11 @@
 const props = defineProps<{
   path: string;
 }>();
-const { $KV } = useNuxtApp();
+const event = useRequestEvent();
+const kv = event?.context.cloudflare.env.KV as KVNamespace;
 const PREFIX = "viewer-count";
-const count = Number((await $KV?.get(`${PREFIX}:${props.path}`)) || 0);
-await $KV?.put(`${PREFIX}:${props.path}`, String(count + 1));
+const count = Number((await kv?.get(`${PREFIX}:${props.path}`)) || 0);
+await kv?.put(`${PREFIX}:${props.path}`, String(count + 1));
 </script>
 
 <style></style>
