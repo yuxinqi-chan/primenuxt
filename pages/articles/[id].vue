@@ -23,7 +23,7 @@ const wordCount = computed(() => {
         <div class="flex items-center gap-1">
           <i class="pi pi-calendar text-sm"></i>
           <time :datetime="dayjs(article?.createdAt).utc().toString()">
-            {{ dayjs(article?.createdAt).locale("zh-cn").format("LL LTS") }}
+            {{ dayjs(article?.createdAt).format("LL LTS") }}
           </time>
         </div>
         <div class="flex items-center gap-1">

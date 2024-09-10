@@ -5,6 +5,7 @@ import timezone from "dayjs/plugin/timezone";
 import isBetween from "dayjs/plugin/isBetween";
 import duration from "dayjs/plugin/duration";
 import localizedFormat from "dayjs/plugin/localizedFormat";
+import updateLocale from "dayjs/plugin/updateLocale";
 
 dayjs.extend(relativeTime);
 dayjs.extend(utc);
@@ -12,5 +13,6 @@ dayjs.extend(timezone);
 dayjs.extend(isBetween);
 dayjs.extend(duration);
 dayjs.extend(localizedFormat);
+dayjs.extend(updateLocale);
 
 export default dayjs;
