@@ -1,12 +1,9 @@
 <script lang="ts" setup>
-import "dayjs/locale/zh-cn";
-
 const { id } = useRoute().params;
 const { data: article } = await useFetch(`/api/articles/${id}`);
 const wordCount = computed(() => {
   return article.value?.content.replace(/<[^>]*>?/g, "").length;
 });
-const createdAt = dayjs(article.value?.createdAt).locale("zh-cn", {});
 </script>
 <template>
   <Card v-if="article">
@@ -25,8 +22,8 @@ const createdAt = dayjs(article.value?.createdAt).locale("zh-cn", {});
       <div class="flex flex-wrap items-center gap-2 text-sm">
         <div class="flex items-center gap-1">
           <i class="pi pi-calendar text-sm"></i>
-          <time :datetime="createdAt.utc().toString()">
-            {{ createdAt.format("LL LTS") }}
+          <time :datetime="dayjs(article?.createdAt).utc().toString()">
+            {{ dayjs(article?.createdAt).locale("zh-cn").format("LL LTS") }}
           </time>
         </div>
         <div class="flex items-center gap-1">
