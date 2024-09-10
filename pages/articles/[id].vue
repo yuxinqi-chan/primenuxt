@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import "dayjs/locale/zh-cn";
+
 const { id } = useRoute().params;
 const { data: article } = await useFetch(`/api/articles/${id}`);
 const wordCount = computed(() => {
