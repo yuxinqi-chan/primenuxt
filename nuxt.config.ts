@@ -41,6 +41,7 @@ export default defineNuxtConfig({
     "nuxt-svgo-loader",
     "@vee-validate/nuxt",
     "@formkit/auto-animate/nuxt",
+    "@nuxtjs/leaflet",
   ],
   primevue: {
     options: {

@@ -16,7 +16,21 @@
             <span>Unknown</span>
           </div>
         </Tag>
-        <div id="map" class="h-40 w-full rounded-md"></div>
+        <div class="h-40 w-full rounded-md">
+          <LMap
+            ref="map"
+            :options="{ zoomControl: false, attributionControl: true }"
+            :zoom="zoom"
+            :center="[latitude, longitude]"
+            :use-global-leaflet="false">
+            <LTileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&amp;copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
+              layer-type="base"
+              name="OpenStreetMap"
+              @ready="replacePrefix" />
+          </LMap>
+        </div>
       </div>
     </template>
   </Card>
@@ -26,23 +40,13 @@
 const cf = useNuxtApp().$cf;
 const latitude = Number(cf.latitude);
 const longitude = Number(cf.longitude);
-async function initMap() {
-  const L = await import("leaflet");
-  const map = L.map("map", {
-    zoomControl: false,
-  }).setView([latitude, longitude], 13);
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution:
-      '<a target="_blank" href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> | © <a target="_blank" href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    maxZoom: 19,
-  }).addTo(map);
-  L.marker([latitude, longitude]).addTo(map).openPopup();
-  map.attributionControl.setPrefix("");
-  map.invalidateSize();
+const zoom = ref(8);
+const map = ref();
+function replacePrefix() {
+  map.value.leafletObject.attributionControl.setPrefix(
+    `<a target="_blank" href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>`,
+  );
 }
-onMounted(() => {
-  initMap();
-});
 </script>
 
 <style scoped>
