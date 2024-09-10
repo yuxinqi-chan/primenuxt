@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import zhCn from "dayjs/locale/zh-cn";
 const { id } = useRoute().params;
 const { data: article } = await useFetch(`/api/articles/${id}`);
 const wordCount = computed(() => {
@@ -24,7 +23,11 @@ const wordCount = computed(() => {
         <div class="flex items-center gap-1">
           <i class="pi pi-calendar text-sm"></i>
           <time :datetime="dayjs(article?.createdAt).utc().toString()">
-            {{ dayjs(article?.createdAt).locale(zhCn).format("LL LTS") }}
+            {{
+              dayjsLocale(article?.createdAt, "zh-cn", $cf.timezone).format(
+                "LL LTS",
+              )
+            }}
           </time>
         </div>
         <div class="flex items-center gap-1">
