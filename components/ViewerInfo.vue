@@ -16,7 +16,7 @@
             <span>Unknown</span>
           </div>
         </Tag>
-        <div class="h-40 w-full rounded-md">
+        <div class="h-40 w-full overflow-hidden rounded-md">
           <LMap
             ref="map"
             :options="{ zoomControl: false, attributionControl: true }"
