@@ -12,7 +12,8 @@
     "deploy": "npm run build && wrangler pages deploy",
     "cf-typegen": "wrangler types",
     "migrate": "npx tsx prisma/migrate.ts create",
-    "apply": "npx tsx prisma/migrate.ts apply --remote"
+    "apply": "npx tsx prisma/migrate.ts apply --remote",
+    "init": "npx tsx prisma/migrate.ts apply"
   },
   "dependencies": {
     "@enzedonline/quill-blot-formatter2": "^2.1.2",

@@ -1,75 +1,62 @@
-# Nuxt 3 Minimal Starter
+# PrimeNuxt
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A modern, high-performance open-source blogging system built with PrimeVue and Nuxt.js, deployed on Cloudflare Pages.
 
-## Setup
+## Key Features
 
-Make sure to install the dependencies:
+- Built with Vue 3 and Nuxt 3 for excellent developer experience and performance
+- Integrated PrimeVue component library for a beautiful, responsive user interface
+- Deployed on Cloudflare Pages for fast global access and high availability
+
+## Tech Stack
+
+- Frontend Framework: Vue 3 & Nuxt 3
+- UI Components: PrimeVue
+- Database: Cloudflare D1
+- Hosting: Cloudflare Pages
+
+## Getting Started
+
+Clone the repository:
 
 ```bash
-# npm
+git clone https://github.com/yuxinqi-chan/primenuxt.git
+```
+
+Install dependencies:
+
+```bash
 npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
 ```
 
-## Development Server
+Copy `wrangler.toml.example` to `wrangler.toml`.
 
-Start the development server on `http://localhost:3000`:
+Initialize the database:
 
 ```bash
-# npm
+npm run init
+```
+
+Run the development server:
+
+```bash
 npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+Deploy the application with wrangler or Cloudflare Pages Web UI:
 
-Build the application for production:
+Binddings:
+
+- D1: `DB`
+- KV: `KV`
+- R2: `MEDIA_BUCKET`
+- ENV:
+  - `MEDIA_BUCKET_PUBLIC_URL` if you want to use a custom domain for the media bucket
 
 ```bash
-# npm
-npm run build
-
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+npm run deploy
 ```
 
-Locally preview production build:
+## Contributing
 
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+Issues and pull requests are welcome!
