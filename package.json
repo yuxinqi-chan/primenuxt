@@ -8,6 +8,7 @@
     "generate": "nuxt generate",
     "preview": "npm run build && wrangler pages dev",
     "postinstall": "nuxt prepare & prisma generate",
+    "cleanup": "npx nuxi cleanup",
     "deploy": "npm run build && wrangler pages deploy",
     "cf-typegen": "wrangler types",
     "migrate": "npx tsx prisma/migrate.ts create",

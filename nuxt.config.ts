@@ -1,7 +1,9 @@
 import Aura from "@primevue/themes/aura";
 import image from "@rollup/plugin-image";
 import type { NitroConfig } from "nitropack";
-const nitroConfig: NitroConfig = {
+import type { NuxtConfig } from "nuxt/schema";
+
+const nitroConfig = {
   preset: "cloudflare-pages",
   experimental: {
     wasm: true,
@@ -9,9 +11,9 @@ const nitroConfig: NitroConfig = {
   rollupConfig: {
     plugins: [image()],
   },
-};
-// https://nuxt.com/docs/api/configuration/nuxt-config
-export default defineNuxtConfig({
+} as NitroConfig;
+
+const config = {
   compatibilityDate: "2024-04-03",
   devtools: { enabled: true },
   experimental: {
@@ -67,4 +69,6 @@ export default defineNuxtConfig({
     adminUsername: "admin@example.com",
     adminPassword: "123456",
   },
-});
+} as NuxtConfig;
+// https://nuxt.com/docs/api/configuration/nuxt-config
+export default defineNuxtConfig(config);
