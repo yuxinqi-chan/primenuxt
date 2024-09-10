@@ -28,7 +28,7 @@ const wordCount = computed(() => {
         </div>
         <div class="flex items-center gap-1">
           <i class="pi pi-eye text-sm"></i>
-          <ViewerCount />
+          <ViewerCount :path="$route.path" />
         </div>
         <div class="flex items-center gap-1">
           <i class="pi pi-pencil text-sm"></i>
