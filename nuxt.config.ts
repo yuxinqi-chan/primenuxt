@@ -12,6 +12,12 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
+      script: [
+        {
+          src: "https://cdn.jsdelivr.net/npm/sharer.js@0.5.2/sharer.min.js",
+          defer: true,
+        },
+      ],
       link: [
         {
           rel: "stylesheet",
@@ -50,6 +56,7 @@ export default defineNuxtConfig({
     "@vee-validate/nuxt",
     "@formkit/auto-animate/nuxt",
     "@nuxtjs/leaflet",
+    "@nuxt/icon",
   ],
   primevue: {
     options: {

@@ -111,7 +111,7 @@ export default {
       this.handleReadOnlyChange();
     },
   },
-  mounted() {
+  async mounted() {
     const configuration = {
       modules: {
         toolbar: this.$refs.toolbarElement,
@@ -126,11 +126,13 @@ export default {
 
     if (QuillJS) {
       // Loaded by script only
+      await this.customModules(QuillJS);
       this.quill = new QuillJS(this.$refs.editorElement, configuration);
       this.initQuill();
       this.handleLoad();
     } else {
       import("quill")
+        .then((module) => this.customModules(module))
         .then((module) => {
           if (module && isExist(this.$refs.editorElement)) {
             if (module.default) {
@@ -165,6 +167,26 @@ export default {
           this.quill.setText("");
         }
       }
+    },
+    async customModules(_module) {
+      const module = _module.default || _module;
+      const BlotFormatter2 = await import("@enzedonline/quill-blot-formatter2");
+      module.register(
+        "modules/blotFormatter2",
+        BlotFormatter2.default || BlotFormatter2,
+      );
+      module.import("formats/image").sanitize = (url) => {
+        return this.sanitize(url, ["http", "https", "data", "blob"])
+          ? url
+          : "//:0";
+      };
+      return module;
+    },
+    sanitize(url, protocols) {
+      var anchor = document.createElement("a");
+      anchor.href = url;
+      var protocol = anchor.href.slice(0, anchor.href.indexOf(":"));
+      return protocols.indexOf(protocol) > -1;
     },
     initQuill() {
       this.renderValue(this.modelValue);

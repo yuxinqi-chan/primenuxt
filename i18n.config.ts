@@ -53,6 +53,9 @@ export default defineI18nConfig(() => ({
       dashboard: "Dashboard",
       resourcesManagement: "Resources Management",
       home: "Home",
+      Article: "Article",
+      copySuccess: "Copy Success",
+      linkCopied: "Link Copied to Clipboard",
     },
     zh: {
       welcome: "欢迎来到PrimeLand!",
@@ -105,6 +108,9 @@ export default defineI18nConfig(() => ({
       dashboard: "仪表盘",
       resourcesManagement: "资源管理",
       home: "首页",
+      Article: "文章",
+      copySuccess: "复制成功",
+      linkCopied: "链接已复制到剪贴板",
     },
   },
 }));

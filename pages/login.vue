@@ -69,7 +69,7 @@ const { status: loginStatus, execute: loginExecute } = await useAsyncData(
 
 <template>
   <div
-    class="flex min-h-screen min-w-[100vw] items-center justify-center overflow-hidden bg-surface-50 dark:bg-surface-950">
+    class="flex min-h-screen min-w-[100vw] items-center justify-center overflow-hidden bg-[var(--surface-ground)]">
     <div class="flex flex-col items-center justify-center">
       <div
         style="

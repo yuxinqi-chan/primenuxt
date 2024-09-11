@@ -8,9 +8,7 @@
       <div class="h-fit w-72 flex-shrink-0 max-md:hidden">
         <ViewerInfo class="shadow-none"></ViewerInfo>
       </div>
-      <div class="flex min-w-0 flex-grow flex-col">
-        <slot />
-      </div>
+      <slot />
       <TagsCard
         class="h-fit w-72 flex-shrink-0 shadow-none max-lg:hidden"></TagsCard>
     </main>

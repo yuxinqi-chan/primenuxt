@@ -24,6 +24,13 @@ const toggleMobileMenu = (event: Event) => {
 };
 const userMenuItems = ref<MenuItem[]>([
   {
+    label: t("adminPanel"),
+    icon: "pi pi-wrench",
+    command: () => {
+      navigateTo("/admin");
+    },
+  },
+  {
     label: t("logout"),
     icon: "pi pi-sign-out",
     command: async () => {
@@ -166,18 +173,6 @@ const toggleLanguageMenu = (event: Event) => {
         text
         rounded
         @click="toggleMobileMenu" />
-      <Button
-        v-if="session.user"
-        :title="t('adminPanel')"
-        type="button"
-        icon="pi pi-wrench"
-        severity="secondary"
-        text
-        rounded
-        size="large"
-        class="max-lg:hidden"
-        :as="NuxtLink"
-        to="/admin" />
       <Button
         v-if="session.user"
         type="button"
