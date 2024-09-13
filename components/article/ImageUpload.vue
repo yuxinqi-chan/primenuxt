@@ -19,13 +19,13 @@
               rounded
               outlined
               severity="secondary"></Button>
-            <Button
+            <!-- <Button
               @click="uploadEvent(uploadCallback)"
               icon="pi pi-cloud-upload"
               rounded
               outlined
               severity="success"
-              :disabled="!files || files.length === 0"></Button>
+              :disabled="!files || files.length === 0"></Button> -->
             <Button
               @click="clearCallback()"
               icon="pi pi-times"

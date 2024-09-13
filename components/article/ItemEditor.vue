@@ -132,28 +132,6 @@ async function editorLoad({ instance: quill }: any) {
     };
   });
 }
-
-const modules = {
-  toolbar: [
-    ["bold", "italic", "underline", "strike"],
-    ["blockquote", "code-block"],
-
-    [{ header: 1 }, { header: 2 }],
-    [{ list: "ordered" }, { list: "bullet" }],
-    [{ script: "sub" }, { script: "super" }],
-    [{ indent: "-1" }, { indent: "+1" }],
-    [{ direction: "rtl" }],
-
-    [{ size: ["small", false, "large", "huge"] }],
-    [{ header: [1, 2, 3, 4, 5, 6, false] }],
-
-    [{ color: [] }, { background: [] }],
-    [{ font: [] }],
-    [{ align: [] }],
-
-    ["clean"],
-  ],
-};
 </script>
 
 <template>
@@ -165,40 +143,49 @@ const modules = {
         icon="pi pi-arrow-left"
         @click="$router.back()" />
     </div>
-    <div>
-      <label for="title" class="mb-3 block font-bold">{{ $t("title") }}</label>
-      <InputText
-        id="title"
-        v-model.trim="article.title"
-        required="true"
-        autofocus
-        :invalid="!article.title"
-        fluid />
-    </div>
-    <div>
-      <label for="tags" class="mb-3 block font-bold">{{ $t("tags") }}</label>
-      <div class="flex flex-wrap gap-2">
-        <Chip
-          v-for="tag in article.tags"
-          :key="tag.id"
-          :label="tag.name"
-          removable
-          @remove="removeTag(tag)" />
-        <InputGroup class="w-60">
-          <AutoComplete
-            v-model="enteredTag"
-            optionLabel="name"
-            :suggestions="filteredTags"
-            @complete="searchTag"
-            @keyup.enter="addTag" />
-          <Button icon="pi pi-plus" @click="addTag" />
-        </InputGroup>
-      </div>
-    </div>
+    <Card class="shadow-none">
+      <template #title>{{ $t("title") }}</template>
+      <template #content>
+        <InputText
+          id="title"
+          v-model.trim="article.title"
+          required="true"
+          autofocus
+          :invalid="!article.title"
+          fluid />
+      </template>
+    </Card>
+    <Card class="shadow-none">
+      <template #title>{{ $t("tags") }}</template>
+      <template #content>
+        <div class="flex flex-wrap items-center gap-2">
+          <Tag
+            v-for="tag in article.tags"
+            :key="tag.id"
+            :value="tag.name"
+            severity="info"
+            @remove="removeTag(tag)" />
+          <InputGroup class="w-60">
+            <AutoComplete
+              v-model="enteredTag"
+              optionLabel="name"
+              :suggestions="filteredTags"
+              @complete="searchTag"
+              @keyup.enter="addTag" />
+            <Button icon="pi pi-plus" @click="addTag" />
+          </InputGroup>
+        </div>
+      </template>
+    </Card>
     <ArticleImageUpload ref="imageUpload" v-model:cover="article.image" />
-    <div>
-      <QuillEditor v-model="article.content" @load="editorLoad" />
-    </div>
+    <Card class="shadow-none">
+      <template #title>{{ $t("content") }}</template>
+      <template #content>
+        <div>
+          <QuillEditor v-model="article.content" @load="editorLoad" />
+        </div>
+      </template>
+    </Card>
     <div class="flex items-center justify-end gap-4">
       <label for="published" class="block font-bold">
         {{ $t("publish") }}

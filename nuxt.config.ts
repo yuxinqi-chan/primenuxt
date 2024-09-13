@@ -86,5 +86,8 @@ export default defineNuxtConfig({
   runtimeConfig: {
     adminUsername: "admin@example.com",
     adminPassword: "123456",
+    public: {
+      siteName: "Compilesoul",
+    },
   },
 } as NuxtConfig);

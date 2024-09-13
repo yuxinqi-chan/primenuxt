@@ -6,7 +6,10 @@ definePageMeta({
   layout: false,
   middleware: ["auth"],
 });
-
+const { t } = useI18n();
+useHead({
+  title: t("login"),
+});
 const toast = useToast();
 const session = useSessionStore();
 const { data: isInitialized } = await useFetch("/api/auth/init", {

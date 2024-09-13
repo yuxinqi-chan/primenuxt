@@ -12,6 +12,10 @@
 </template>
 
 <script lang="ts" setup>
+const { t } = useI18n();
+useHead({
+  title: t("home"),
+});
 const { data: articles } = await useFetch("/api/articles", {
   query: {
     sort: "desc",

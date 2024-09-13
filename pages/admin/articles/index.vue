@@ -11,7 +11,10 @@ definePageMeta({
   layout: "admin",
   middleware: ["auth"],
 });
-
+const { t } = useI18n();
+useHead({
+  title: t("manageArticles"),
+});
 const toast = useToast();
 const { data: articles, refresh } = await useFetch("/api/articles", {
   default: () => [],

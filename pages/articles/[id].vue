@@ -7,6 +7,9 @@ const toast = useToast();
 const { protocol, host } = useCloudflareStore();
 const { id } = route.params;
 const { data: article } = await useFetch(`/api/articles/${id}`);
+useHead({
+  title: article.value?.title,
+});
 const wordCount = computed(() => {
   return article.value?.content.replace(/<[^>]*>?/g, "").length;
 });
@@ -59,7 +62,7 @@ const copyToClipboard = () => {
         </template>
       </Breadcrumb>
       <div class="flex items-center p-3">
-        分享到：
+        <span class="mr-2">{{ t("shareTo") }}</span>
         <ButtonGroup>
           <Button
             text
@@ -91,7 +94,7 @@ const copyToClipboard = () => {
       <template #subtitle>
         <div class="flex flex-wrap items-center gap-2 text-sm">
           <div class="flex items-center gap-1">
-            <i class="pi pi-calendar text-sm"></i>
+            <i class="pi pi-clock text-sm"></i>
             <DateTime :date="article.createdAt" format="LL LTS" />
           </div>
           <div class="flex items-center gap-1">
@@ -112,6 +115,15 @@ const copyToClipboard = () => {
       <template #content>
         <div class="ql-snow">
           <div class="ql-editor" v-html="article.content"></div>
+        </div>
+      </template>
+      <template #footer>
+        <div class="flex gap-2 text-sm">
+          <div class="flex items-center gap-1">
+            <i class="pi pi-clock text-sm"></i>
+            <span>{{ $t("lastUpdateAt") }}</span>
+            <DateTime :date="article.updatedAt" format="LL LTS" />
+          </div>
         </div>
       </template>
     </Card>

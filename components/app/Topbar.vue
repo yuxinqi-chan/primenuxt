@@ -7,6 +7,7 @@ import { FetchError } from "ofetch";
 import Logo from "~/assets/icons/logo.svg?component";
 
 const { t } = useI18n();
+const config = useRuntimeConfig();
 const toast = useToast();
 const session = useSessionStore();
 const layout = useLayoutStore();
@@ -93,7 +94,7 @@ const toggleLanguageMenu = (event: Event) => {
 
 <template>
   <div
-    class="flex h-16 w-full items-center bg-[var(--p-content-background)] px-8 lg:px-8">
+    class="z-[9999] flex h-16 w-full items-center bg-[var(--p-content-background)] px-8 lg:px-8">
     <div class="flex w-80 items-center lg:w-auto">
       <Button
         v-if="session.user && !$route.path.startsWith('/admin')"
@@ -108,7 +109,7 @@ const toggleLanguageMenu = (event: Event) => {
         to="/"
         class="inline-flex items-center gap-2 text-2xl font-medium">
         <Logo class="w-12 text-[var(--p-primary-color)]" />
-        <span>SAKAI</span>
+        <span>{{ config.public.siteName }}</span>
       </NuxtLink>
     </div>
     <div class="ml-auto flex gap-4">

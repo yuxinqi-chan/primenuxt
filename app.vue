@@ -22,6 +22,10 @@ nuxtApp.hook("page:finish", () => {
 useSessionStore();
 useCloudflareStore();
 useLayoutStore();
+const config = useRuntimeConfig();
+useHead({
+  titleTemplate: (title) => `${title} - ${config.public.siteName}`,
+});
 </script>
 <style lang="css">
 .loader {
