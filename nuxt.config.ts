@@ -30,7 +30,12 @@ export default defineNuxtConfig({
       mode: "out-in",
     },
   },
-  css: ["~/assets/styles.scss", "~/assets/tailwind.css"],
+  css: [
+    "quill/dist/quill.core.css",
+    "quill/dist/quill.snow.css",
+    "~/assets/styles.scss",
+    "~/assets/tailwind.css",
+  ],
   postcss: {
     plugins: {
       tailwindcss: {},

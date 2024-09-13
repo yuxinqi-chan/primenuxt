@@ -1,5 +1,5 @@
 <template>
-  <div v-auto-animate class="flex flex-col gap-4">
+  <div v-auto-animate class="flex min-w-0 flex-grow flex-col gap-4">
     <ArticleItemCard
       v-animateonscroll="{
         enterClass: 'animate-scalein',
