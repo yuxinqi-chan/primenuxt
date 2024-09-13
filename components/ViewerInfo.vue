@@ -3,11 +3,16 @@
     <template #title>{{ $t("viewerInfo") }}</template>
     <template #content>
       <div class="flex flex-col items-start gap-2">
-        <Tag icon="pi pi-globe" :value="cf.ip || $t('unknown')"></Tag>
-        <Tag icon="pi pi-map-marker" :value="cf.region || $t('unknown')"></Tag>
-        <Tag icon="pi pi-building" :value="cf.city || $t('unknown')"></Tag>
-        <Tag icon="pi pi-clock" :value="cf.timezone"></Tag>
-        <Tag icon="pi pi-sitemap">
+        <Tag
+          icon="pi pi-globe"
+          :value="cf.ip || $t('unknown')"
+          severity="info"></Tag>
+        <Tag
+          icon="pi pi-map-marker"
+          :value="position || $t('unknown')"
+          severity="info"></Tag>
+        <Tag icon="pi pi-clock" :value="cf.timezone" severity="info"></Tag>
+        <Tag icon="pi pi-sitemap" severity="info">
           <div class="flex items-center gap-1" v-if="cf.asOrganization">
             <span>{{ cf.asOrganization }}</span>
             <span>{{ cf.asn }}</span>
@@ -51,6 +56,24 @@ function replacePrefix() {
     `<a target="_blank" href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>`,
   );
 }
+const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
+const continentNames = {
+  AF: "Africa",
+  AN: "Antarctica",
+  AS: "Asia",
+  EU: "Europe",
+  NA: "North America",
+  OC: "Oceania",
+  SA: "South America",
+};
+const position = [
+  cf.continent && continentNames[cf.continent],
+  cf.country && regionNames.of(cf.country),
+  cf.region,
+  cf.city,
+]
+  .filter(Boolean)
+  .join("-");
 </script>
 
 <style>
