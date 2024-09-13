@@ -113,7 +113,7 @@ const copyToClipboard = () => {
         </div>
       </template>
       <template #content>
-        <div class="ql-snow">
+        <div class="ql-snow" style="position: relative">
           <div class="ql-editor" v-html="article.content"></div>
         </div>
       </template>
