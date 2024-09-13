@@ -53,6 +53,12 @@ function replacePrefix() {
 }
 </script>
 
-<style scoped>
+<style>
 @import "leaflet/dist/leaflet.css";
+.leaflet-pane {
+  z-index: 0;
+}
+.leaflet-bottom {
+  z-index: 0;
+}
 </style>

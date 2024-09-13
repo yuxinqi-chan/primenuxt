@@ -94,7 +94,7 @@ const toggleLanguageMenu = (event: Event) => {
 
 <template>
   <div
-    class="z-[9999] flex h-16 w-full items-center bg-[var(--p-content-background)] px-8 lg:px-8">
+    class="flex h-16 w-full items-center bg-[var(--p-content-background)] px-8 lg:px-8">
     <div class="flex w-80 items-center lg:w-auto">
       <Button
         v-if="session.user && !$route.path.startsWith('/admin')"

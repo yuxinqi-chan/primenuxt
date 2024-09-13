@@ -129,4 +129,7 @@ const copyToClipboard = () => {
     </Card>
   </div>
 </template>
-<style></style>
+<style>
+@import "quill/dist/quill.core.css";
+@import "quill/dist/quill.snow.css";
+</style>

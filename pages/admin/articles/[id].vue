@@ -14,9 +14,10 @@ const { data: article } = await useFetch(`/api/articles/${id}`, {
   default: () => undefined,
 });
 </script>
-
 <template>
   <ArticleItemEditor v-if="article" :model-value="article" />
 </template>
-
-<style scoped></style>
+<style>
+@import "quill/dist/quill.core.css";
+@import "quill/dist/quill.snow.css";
+</style>

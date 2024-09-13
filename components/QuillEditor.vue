@@ -85,7 +85,21 @@ const QuillJS = (function () {
 
 export default {
   name: "Editor",
-  extends: Editor.extends,
+  extends: Editor.extends.extends,
+  props: {
+    modelValue: String,
+    placeholder: String,
+    readonly: Boolean,
+    formats: Array,
+    editorStyle: null,
+    modules: null,
+  },
+  provide() {
+    return {
+      $pcEditor: this,
+      $parentInstance: this,
+    };
+  },
   inheritAttrs: false,
   emits: ["update:modelValue", "text-change", "selection-change", "load"],
   data() {
