@@ -250,3 +250,6 @@ export default {
   },
 };
 </script>
+<style>
+@import "@enzedonline/quill-blot-formatter2/dist/css/quill-blot-formatter2.css";
+</style>

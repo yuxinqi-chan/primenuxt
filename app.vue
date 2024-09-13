@@ -27,7 +27,38 @@ useHead({
   titleTemplate: (title) => `${title} - ${config.public.siteName}`,
 });
 </script>
-<style lang="css">
+<style lang="scss">
+@import "primeicons/primeicons.css";
+:root {
+  --surface-ground: var(--p-surface-100);
+}
+
+:root[class*="app-dark"] {
+  --surface-ground: var(--p-surface-950);
+}
+
+html {
+  font-size: 14px;
+}
+
+body {
+  font-family: "Lato", sans-serif;
+  background-color: var(--surface-ground);
+}
+.ql-snow {
+  img {
+    display: inline-block;
+  }
+}
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s;
+}
+.page-enter-from,
+.page-leave-to {
+  opacity: 0;
+  filter: blur(1rem);
+}
 .loader {
   width: 60px;
   aspect-ratio: 1;
