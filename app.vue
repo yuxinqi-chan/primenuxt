@@ -42,7 +42,8 @@ html {
 }
 
 body {
-  font-family: "Lato", sans-serif;
+  font-family: "Helvetica Neue", "Segoe UI", Arial, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
   background-color: var(--surface-ground);
 }
 .ql-snow {
