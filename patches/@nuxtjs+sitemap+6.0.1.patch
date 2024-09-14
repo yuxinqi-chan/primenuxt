@@ -1,0 +1,13 @@
+diff --git a/node_modules/@nuxtjs/sitemap/dist/runtime/nitro/sitemap/urlset/sources.js b/node_modules/@nuxtjs/sitemap/dist/runtime/nitro/sitemap/urlset/sources.js
+index 2e02805..c5805af 100644
+--- a/node_modules/@nuxtjs/sitemap/dist/runtime/nitro/sitemap/urlset/sources.js
++++ b/node_modules/@nuxtjs/sitemap/dist/runtime/nitro/sitemap/urlset/sources.js
+@@ -11,7 +11,7 @@ export async function fetchDataSource(input, event) {
+   const abortRequestTimeout = setTimeout(() => timeoutController.abort(), timeout);
+   let isHtmlResponse = false;
+   try {
+-    const urls = await globalThis.$fetch(url, {
++    const urls = await (event || globalThis).$fetch(url, {
+       ...options,
+       responseType: "json",
+       signal: timeoutController.signal,
