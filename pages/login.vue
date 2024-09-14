@@ -7,6 +7,7 @@ definePageMeta({
   middleware: ["auth"],
 });
 const { t } = useI18n();
+const config = useRuntimeConfig();
 useHead({
   title: t("login"),
 });
@@ -26,8 +27,8 @@ const { status: initStatus, execute: initExecute } = await useAsyncData(
       await session.initAdmin();
       toast.add({
         severity: "success",
-        summary: "Admin initialized",
-        detail: "Admin has been initialized",
+        summary: t("adminInitialized"),
+        detail: t("adminInitializedSuccessfully"),
         life: 3000,
       });
       navigateTo("/");
@@ -35,7 +36,7 @@ const { status: initStatus, execute: initExecute } = await useAsyncData(
       if (error instanceof FetchError) {
         toast.add({
           severity: "error",
-          summary: "Failed to initialize admin",
+          summary: t("adminInitializationFailed"),
           detail: error.statusMessage,
           life: 3000,
         });
@@ -50,8 +51,8 @@ const { status: loginStatus, execute: loginExecute } = await useAsyncData(
       await session.login(email, password);
       toast.add({
         severity: "success",
-        summary: "Login Successful",
-        detail: "Welcome to PrimeLand!",
+        summary: t("loginSuccess"),
+        detail: t("welcomeTo", { name: config.public.siteName }),
         life: 3000,
       });
       navigateTo("/");
@@ -59,7 +60,7 @@ const { status: loginStatus, execute: loginExecute } = await useAsyncData(
       if (error instanceof FetchError) {
         toast.add({
           severity: "error",
-          summary: "Login Failed",
+          summary: t("loginFailed"),
           detail: error.statusMessage,
           life: 3000,
         });
@@ -91,7 +92,7 @@ const { status: loginStatus, execute: loginExecute } = await useAsyncData(
             <Logo class="mx-auto mb-8 w-16 shrink-0" />
             <div
               class="mb-4 text-3xl font-medium text-surface-900 dark:text-surface-0">
-              {{ $t("welcome") }}
+              {{ $t("welcomeTo", { name: config.public.siteName }) }}
             </div>
             <span class="font-medium text-muted-color">
               {{ $t("signInToContinue") }}
@@ -109,7 +110,8 @@ const { status: loginStatus, execute: loginExecute } = await useAsyncData(
               type="text"
               :placeholder="$t('emailAddress')"
               class="mb-8 w-full md:w-[30rem]"
-              v-model="email" />
+              v-model="email"
+              :disabled="!isInitialized" />
 
             <label
               for="password1"
@@ -123,7 +125,8 @@ const { status: loginStatus, execute: loginExecute } = await useAsyncData(
               :toggleMask="true"
               class="mb-4"
               fluid
-              :feedback="false"></Password>
+              :feedback="false"
+              :disabled="!isInitialized" />
 
             <div class="mb-8 mt-2 flex items-center justify-between gap-8">
               <div class="flex items-center">

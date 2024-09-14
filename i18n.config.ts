@@ -3,7 +3,7 @@ export default defineI18nConfig(() => ({
   locale: "en",
   messages: {
     en: {
-      welcome: "Welcome to PrimeLand!",
+      welcomeTo: "Welcome to {name}",
       welcomeBack: "Welcome back, {name}!",
       signInToContinue: "Sign in to continue",
       tagCloud: "Tag Cloud",
@@ -20,6 +20,9 @@ export default defineI18nConfig(() => ({
       profile: "Profile",
       settings: "Settings",
       initAdmin: "Initialize Admin",
+      adminInitialized: "Admin Initialized",
+      adminInitializationFailed: "Admin Initialization Failed",
+      adminInitializedSuccessfully: "Admin Initialized Successfully",
       forgotPassword: "Forgot Password?",
       rememberMe: "Remember me",
       loginSuccess: "Login Success",
@@ -66,7 +69,7 @@ export default defineI18nConfig(() => ({
       allRightsReserved: "All rights reserved.",
     },
     zh: {
-      welcome: "欢迎来到PrimeLand!",
+      welcomeTo: "欢迎来到{name}!",
       welcomeBack: "欢迎回来, {name}!",
       signInToContinue: "登录以继续",
       tagCloud: "标签云",
@@ -83,6 +86,9 @@ export default defineI18nConfig(() => ({
       profile: "个人资料",
       settings: "设置",
       initAdmin: "初始化管理员",
+      adminInitialized: "管理员已初始化",
+      adminInitializationFailed: "管理员初始化失败",
+      adminInitializedSuccessfully: "管理员初始化成功",
       forgotPassword: "忘记密码？",
       rememberMe: "记住我",
       loginSuccess: "登录成功",

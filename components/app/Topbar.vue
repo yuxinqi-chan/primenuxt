@@ -114,6 +114,16 @@ const toggleLanguageMenu = (event: Event) => {
     </div>
     <div class="ml-auto flex gap-4">
       <Button
+        as="a"
+        href="https://github.com/yuxinqi-chan/primenuxt"
+        target="_blank"
+        type="button"
+        rounded
+        icon="pi pi-github"
+        severity="secondary"
+        text
+        size="large" />
+      <Button
         type="button"
         rounded
         @click="toggleLanguageMenu"
