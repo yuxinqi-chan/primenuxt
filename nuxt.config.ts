@@ -13,6 +13,11 @@ export default defineNuxtConfig({
   sitemap: {
     exclude: ["/admin/**"],
     sources: [`/api/__sitemap__/urls`],
+    // sitemaps: {
+    //   articles: {
+    //     sources: [`/api/__sitemap__/urls`],
+    //   },
+    // },
   },
   app: {
     head: {
