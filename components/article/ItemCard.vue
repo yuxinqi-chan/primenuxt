@@ -46,11 +46,13 @@ const summary = computed(() => {
     </template>
     <template #footer>
       <div class="flex flex-wrap gap-2">
-        <Tag
+        <NuxtLink
+          class="cursor-pointer transition-all duration-300 hover:scale-105"
           v-for="tag in article.tags"
           :key="tag.name"
-          :value="tag.name"
-          severity="info" />
+          :to="`/tags/${tag.name}`">
+          <Tag :value="tag.name" severity="info" />
+        </NuxtLink>
       </div>
     </template>
   </Card>

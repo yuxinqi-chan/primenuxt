@@ -59,6 +59,7 @@ export default defineNuxtConfig({
     },
   } as NitroConfig,
   modules: [
+    "@vueuse/nuxt",
     "@pinia/nuxt",
     "@nuxtjs/i18n",
     "nitro-cloudflare-dev",

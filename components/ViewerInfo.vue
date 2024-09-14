@@ -46,6 +46,8 @@
 <script lang="ts" setup>
 import { useCloudflareStore } from "~/stores/cloudflare";
 
+const isMounted = useMounted();
+const { locale, t } = useI18n();
 const cf = useCloudflareStore();
 const latitude = Number(cf.latitude);
 const longitude = Number(cf.longitude);
@@ -56,24 +58,20 @@ function replacePrefix() {
     `<a target="_blank" href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a>`,
   );
 }
-const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
-const continentNames = {
-  AF: "Africa",
-  AN: "Antarctica",
-  AS: "Asia",
-  EU: "Europe",
-  NA: "North America",
-  OC: "Oceania",
-  SA: "South America",
-};
-const position = [
-  cf.continent && continentNames[cf.continent],
-  cf.country && regionNames.of(cf.country),
-  cf.region,
-  cf.city,
-]
-  .filter(Boolean)
-  .join("-");
+
+const regionNames = new Intl.DisplayNames([locale.value], {
+  type: "region",
+});
+const position = computed(() =>
+  [
+    cf.continent && t(`continent.${cf.continent}`),
+    (isMounted && cf.country && regionNames.of(cf.country)) || cf.countryNames,
+    cf.region,
+    cf.city,
+  ]
+    .filter(Boolean)
+    .join("-"),
+);
 </script>
 
 <style>

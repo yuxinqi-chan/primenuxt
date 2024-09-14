@@ -3,6 +3,10 @@ import { defineStore } from "pinia";
 export const useCloudflareStore = defineStore({
   id: "cloudflareStore",
   state: () => {
+    const { locale } = useI18n();
+    const regionNames = new Intl.DisplayNames([locale.value], {
+      type: "region",
+    });
     const url = useRequestURL();
     const event = useRequestEvent();
     const ip = event?.headers.get("CF-Connecting-IP");
@@ -25,6 +29,7 @@ export const useCloudflareStore = defineStore({
       colo: cf?.colo,
       httpProtocol: cf?.httpProtocol,
       tlsVersion: cf?.tlsVersion,
+      countryNames: cf?.country ? regionNames.of(cf.country) : undefined,
     };
   },
   actions: {},

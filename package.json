@@ -59,6 +59,8 @@
     "@types/leaflet": "^1.9.12",
     "@types/lodash": "^4.17.7",
     "@types/quill": "^1.3.10",
+    "@vueuse/core": "^11.0.3",
+    "@vueuse/nuxt": "^11.0.3",
     "autoprefixer": "^10.4.20",
     "nitro-cloudflare-dev": "^0.1.6",
     "patch-package": "^8.0.0",

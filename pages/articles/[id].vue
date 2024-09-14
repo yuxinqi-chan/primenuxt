@@ -20,9 +20,10 @@ const home = ref({
 });
 const items = ref([
   {
-    icon: "pi pi-home",
+    icon: "pi pi-pencil",
     label: t("Article"),
-    route: route.path,
+    route: `/articles/${article.value?.id}`,
+    disabled: true,
   },
 ]);
 const articleUrl = ref(`${protocol}//${host}${route.path}`);
@@ -43,21 +44,15 @@ const copyToClipboard = () => {
   <div v-if="article" class="flex min-w-0 flex-grow flex-col gap-4">
     <div
       class="flex justify-between overflow-hidden rounded-xl bg-[var(--p-content-background)]">
-      <Breadcrumb :home="home" :model="items" v-if="items.length > 0">
+      <Breadcrumb :home="home" :model="items">
         <template #item="{ item, props }">
           <Button
-            v-if="item.route !== $route.path"
+            :icon="item.icon"
+            :disabled="Boolean(item.disabled)"
             text
-            severity="secondary"
             :as="NuxtLink"
             :to="item.route"
-            :icon="item.icon"
-            :label="String(item.label)"></Button>
-          <Button
-            v-else
-            disabled
-            text
-            severity="primary"
+            :severity="item.disabled ? 'primary' : 'secondary'"
             :label="String(item.label)"></Button>
         </template>
       </Breadcrumb>
@@ -105,11 +100,13 @@ const copyToClipboard = () => {
             <i class="pi pi-pencil text-sm"></i>
             <span>{{ wordCount }} {{ $t("words") }}</span>
           </div>
-          <Tag
+          <NuxtLink
+            class="cursor-pointer transition-all duration-300 hover:scale-105"
             v-for="tag in article.tags"
             :key="tag.name"
-            :value="tag.name"
-            severity="info" />
+            :to="`/tags/${tag.name}`">
+            <Tag :value="tag.name" severity="info" />
+          </NuxtLink>
         </div>
       </template>
       <template #content>

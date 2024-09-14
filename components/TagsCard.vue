@@ -2,13 +2,19 @@
   <Card>
     <template #title>{{ $t("tagCloud") }}</template>
     <template #content>
-      <div class="flex flex-wrap gap-1 after:flex-grow-[10]">
-        <Tag
-          class="flex-grow"
+      <div class="flex flex-wrap gap-2 after:flex-grow-[10]">
+        <NuxtLink
+          class="cursor-pointer transition-all duration-300 hover:scale-105"
           v-for="tag in sortedTags"
           :key="tag.name"
-          :value="tag.name"
-          severity="info" />
+          :to="`/tags/${tag.name}`">
+          <Tag
+            :value="tag.name"
+            severity="secondary"
+            v-tooltip.top="
+              `${$t('tagHasArticles', { count: tag._count.articles })}`
+            " />
+        </NuxtLink>
       </div>
     </template>
   </Card>
