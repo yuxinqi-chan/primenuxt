@@ -22,9 +22,7 @@ export default defineNuxtConfig({
         exclude: ["/articles/**"],
       },
       articles: {
-        includeAppSources: true,
         sources: ["/api/__sitemap__/urls/articles"],
-        include: ["/articles/**"],
       },
     },
   },
