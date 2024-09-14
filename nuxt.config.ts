@@ -16,15 +16,7 @@ export default defineNuxtConfig({
   },
   sitemap: {
     exclude: ["/admin/**"],
-    sitemaps: {
-      pages: {
-        includeAppSources: true,
-        exclude: ["/articles/**"],
-      },
-      articles: {
-        sources: ["/api/__sitemap__/urls/articles"],
-      },
-    },
+    sources: ["/api/__sitemap__/urls"],
   },
   app: {
     head: {
