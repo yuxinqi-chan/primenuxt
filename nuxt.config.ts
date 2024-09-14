@@ -12,12 +12,15 @@ export default defineNuxtConfig({
   },
   sitemap: {
     exclude: ["/admin/**"],
-    sources: [`/api/__sitemap__/urls`],
-    // sitemaps: {
-    //   articles: {
-    //     sources: [`/api/__sitemap__/urls`],
-    //   },
-    // },
+    // @nuxtjs/sitemap的server端$fetch没有携带event，请求sources会报错，所以使用patch-package修复
+    sitemaps: {
+      pages: {
+        includeAppSources: true,
+      },
+      articles: {
+        sources: [`/api/__sitemap__/urls/articles`],
+      },
+    },
   },
   app: {
     head: {
