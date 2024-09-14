@@ -10,6 +10,24 @@ export default defineNuxtConfig({
   experimental: {
     componentIslands: true,
   },
+  site: {
+    url: "https://www.compilesoul.com",
+    name: "Compilesoul",
+  },
+  sitemap: {
+    exclude: ["/admin/**"],
+    sitemaps: {
+      pages: {
+        includeAppSources: true,
+        exclude: ["/articles/**"],
+      },
+      articles: {
+        includeAppSources: true,
+        sources: ["/api/__sitemap__/urls/articles"],
+        include: ["/articles/**"],
+      },
+    },
+  },
   app: {
     head: {
       script: [
@@ -57,6 +75,7 @@ export default defineNuxtConfig({
     "@formkit/auto-animate/nuxt",
     "@nuxtjs/leaflet",
     "@nuxt/icon",
+    "@nuxtjs/sitemap",
   ],
   primevue: {
     options: {
