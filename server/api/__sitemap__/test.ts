@@ -3,6 +3,6 @@ export default defineEventHandler(async (event) => {
     const res = await $fetch("/api/__sitemap__/urls");
     return res;
   } catch (error) {
-    return error;
+    return JSON.stringify(error);
   }
 });
