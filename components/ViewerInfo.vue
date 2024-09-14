@@ -59,19 +59,20 @@ function replacePrefix() {
   );
 }
 
-const regionNames = new Intl.DisplayNames([locale.value], {
-  type: "region",
-});
-const position = computed(() =>
-  [
+const position = computed(() => {
+  const regionNames = new Intl.DisplayNames([locale.value], {
+    type: "region",
+  });
+  return [
     cf.continent && t(`continent.${cf.continent}`),
-    (isMounted && cf.country && regionNames.of(cf.country)) || cf.countryNames,
+    (isMounted.value && cf.country && regionNames.of(cf.country)) ||
+      cf.countryNames,
     cf.region,
     cf.city,
   ]
     .filter(Boolean)
-    .join("-"),
-);
+    .join("-");
+});
 </script>
 
 <style>
