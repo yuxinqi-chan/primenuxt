@@ -3,10 +3,6 @@ import image from "@rollup/plugin-image";
 import type { NitroConfig } from "nitropack";
 import type { NuxtConfig } from "nuxt/schema";
 
-const isDev = process.env.NODE_ENV === "development";
-const prodHost = "https://www.compilesoul.com";
-const host = isDev ? "http://localhost:3000" : prodHost;
-
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   compatibilityDate: "2024-04-03",
@@ -14,13 +10,9 @@ export default defineNuxtConfig({
   experimental: {
     componentIslands: true,
   },
-  site: {
-    url: host,
-    name: "Compilesoul",
-  },
   sitemap: {
     exclude: ["/admin/**"],
-    sources: [`${host}/api/__sitemap__/urls`],
+    sources: [`/api/__sitemap__/urls`],
   },
   app: {
     head: {
